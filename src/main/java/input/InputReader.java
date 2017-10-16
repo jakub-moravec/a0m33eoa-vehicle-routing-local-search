@@ -1,10 +1,14 @@
 package input;
 
+import model.ModelHolder;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Input loader.
@@ -16,7 +20,19 @@ import java.io.InputStreamReader;
  */
 public class InputReader {
 
-    public static void read(String fileName) throws FileNotFoundException {
+    private static final String DELIMITER = "\t";
+
+    public static void read(String fileName) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fileName))));
+
+        List<Integer[]> model = new ArrayList<Integer[]>();
+
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] entry = line.split(DELIMITER);
+            model.add(new Integer[]{Integer.valueOf(entry[1]), Integer.valueOf(entry[1])});
+        }
+
+        ModelHolder.setModel(model);
     }
 }
