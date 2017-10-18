@@ -10,39 +10,44 @@ import config.Configuration;
  */
 public class Solution {
 
-    private static int[] citiesOrder;
+    private int[] citiesOrder;
 
-    private static int[] breakpoints;
+    private int[] breakpoints;
+
+    public Solution(int[] citiesOrder, int[] breakpoints) {
+        this.citiesOrder = citiesOrder;
+        this.breakpoints = breakpoints;
+    }
 
     @Nullable
-    public static int[] getCitiesOrder() {
+    public int[] getCitiesOrder() {
         return citiesOrder;
     }
 
-    public static void setCitiesOrder(int[] citiesOrder) {
-        Solution.citiesOrder = citiesOrder;
+    public void setCitiesOrder(int[] citiesOrder) {
+        this.citiesOrder = citiesOrder;
     }
 
     @Nullable
-    public static int[] getBreakpoints() {
+    public int[] getBreakpoints() {
         return breakpoints;
     }
 
-    public static void setBreakpoints(int[] breakpoints) {
-        Solution.breakpoints = breakpoints;
+    public void setBreakpoints(int[] breakpoints) {
+        this.breakpoints = breakpoints;
     }
 
-    public static int getTravelersStart(int traveler) {
+    public int getTravelersStart(int traveler) {
         if (traveler == 0) {
            return 0;
         }
-        return breakpoints[traveler];
+        return breakpoints[traveler - 1];
     }
 
-    public static int getTravelersEnd(int traveler) {
-        if (traveler == Configuration.NUMBER_OF_TRAVELERS) {
-            return ModelHolder.getModel().size() - 1;
+    public int getTravelersEnd(int traveler) {
+        if (traveler == Configuration.getNumberOfTravelers() - 1) {
+            return ModelHolder.getModel().size() - 2; // 1 + depot
         }
-        return breakpoints[traveler + 1];
+        return breakpoints[traveler] - 1;
     }
 }

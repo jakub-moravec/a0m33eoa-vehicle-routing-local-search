@@ -5,5 +5,13 @@ package config;
  */
 public class Configuration {
 
-    public static final int NUMBER_OF_TRAVELERS = 3;
+    private static int NUMBER_OF_TRAVELERS = 3;
+
+    public static int getNumberOfTravelers() {
+        return NUMBER_OF_TRAVELERS;
+    }
+
+    public static void setNumberOfTravelers(int numberOfTravelers) {
+        NUMBER_OF_TRAVELERS = numberOfTravelers;
+    }
 }
