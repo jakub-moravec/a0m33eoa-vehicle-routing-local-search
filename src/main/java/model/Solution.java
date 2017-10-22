@@ -50,4 +50,37 @@ public class Solution {
         }
         return breakpoints[traveler] - 1;
     }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        int traveler = 0;
+
+        // cities orders
+        sb.append("[");
+        for (int i = 0; i < citiesOrder.length; i++) {
+            // add travelers break
+            int currentTravelersEnd = traveler < Configuration.getNumberOfTravelers() - 1 ? breakpoints[traveler] : citiesOrder.length;
+            if (currentTravelersEnd == i) {
+                traveler++;
+                sb.append("|");
+            } else if(i != 0) {
+                sb.append("-");
+            }
+
+            sb.append(citiesOrder[i]);
+        }
+        sb.append("]");
+
+        //breakpoints
+        sb.append("[");
+        for (int i = 0; i < breakpoints.length; i++) {
+            if (i != 0) {
+                sb.append(",");
+            }
+            sb.append(breakpoints[i]);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }
