@@ -14,6 +14,8 @@ public class Solution {
 
     private int[] breakpoints;
 
+    private double evaluation;
+
     public Solution(int[] citiesOrder, int[] breakpoints) {
         this.citiesOrder = citiesOrder;
         this.breakpoints = breakpoints;
@@ -48,7 +50,15 @@ public class Solution {
         if (traveler == Configuration.getNumberOfTravelers() - 1) {
             return ModelHolder.getModel().size() - 2; // 1 + depot
         }
-        return breakpoints[traveler] - 1;
+        return Math.max(0, breakpoints[traveler] - 1);
+    }
+
+    public double getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(double evaluation) {
+        this.evaluation = evaluation;
     }
 
     @Override
@@ -81,6 +91,10 @@ public class Solution {
             sb.append(breakpoints[i]);
         }
         sb.append("]");
+
+        //evaluation
+        sb.append("[").append(evaluation).append("]");
+
         return sb.toString();
     }
 }

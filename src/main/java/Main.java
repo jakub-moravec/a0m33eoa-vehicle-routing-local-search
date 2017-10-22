@@ -1,3 +1,4 @@
+import algorithm.BestNeighborAlgorithm;
 import algorithm.Evaluator;
 import input.InputReader;
 import model.ModelHolder;
@@ -18,8 +19,17 @@ public class Main {
     public static void main(String[] args) throws IOException {
         InputReader.read("src/main/resources/data/mTSP_50.data");
 
-        Solution initialSolution = getInitialSolution();
-        printSolution(initialSolution, Evaluator.evaluate(initialSolution));
+        Solution solution = getInitialSolution();
+        printSolution(0, solution);
+
+
+        for (int i = 0; ; i ++) {
+            Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
+            if (candidate.getEvaluation() < solution.getEvaluation()) {
+                solution = candidate;
+            }
+            printSolution(i+1, solution);
+        }
     }
 
     /**
@@ -48,15 +58,13 @@ public class Main {
             }
         }
 
-        return new Solution(initialCities, initialBreakpoints);
+        Solution initialSolution = new Solution(initialCities, initialBreakpoints);
+        initialSolution.setEvaluation(Evaluator.evaluate(initialSolution));
+
+        return initialSolution;
     }
 
-    private static void printSolution (Solution solution, double evaluation) {
-        System.out.println("0: " + solution.toString()+ "[" + evaluation + "]");
+    private static void printSolution(int generation, Solution solution) {
+        System.out.println(generation + ": " + solution.toString());
     }
-
-
-
-
-
 }
