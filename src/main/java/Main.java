@@ -33,7 +33,7 @@ public class Main {
             generation++;
         } while (generation < 200000);
 
-//        DrawGraph.createAndShowGui(solution);
+//        DrawGraph.createAndShowGui(solution); TODO fix UI
     }
 
     /**

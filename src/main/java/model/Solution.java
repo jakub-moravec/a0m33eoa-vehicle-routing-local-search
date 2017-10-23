@@ -3,6 +3,8 @@ package model;
 import com.sun.istack.internal.Nullable;
 import config.Configuration;
 
+import java.util.Arrays;
+
 /**
  * Solution.
  *
@@ -17,6 +19,9 @@ public class Solution {
     private double[] weights;
 
     private double evaluation;
+
+    public Solution() {
+    }
 
     public Solution(int[] citiesOrder, int[] breakpoints) {
         this.citiesOrder = citiesOrder;
@@ -106,5 +111,15 @@ public class Solution {
         sb.append("[").append(evaluation).append("]");
 
         return sb.toString();
+    }
+
+    @Override
+    public Object clone() {
+        Solution clone = new Solution();
+        clone.setCitiesOrder(Arrays.copyOf(this.getCitiesOrder(), this.getCitiesOrder().length));
+        clone.setBreakpoints(Arrays.copyOf(this.getBreakpoints(), this.getBreakpoints().length));
+        clone.setWeights(Arrays.copyOf(this.getWeights(), this.getWeights().length));
+        clone.setEvaluation(this.getEvaluation());
+        return clone;
     }
 }

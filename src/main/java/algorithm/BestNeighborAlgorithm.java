@@ -46,24 +46,19 @@ public class BestNeighborAlgorithm {
      * @return neighbor solutions
      */
     private static Solution[] getNeighborSolutions(Solution solution, int solutionsCount, int maxOrderChanges, double breaksChangeRatio) {
-
-        // todo clone
-        Solution copy = new Solution(Arrays.copyOf(solution.getCitiesOrder(), solution.getCitiesOrder().length), Arrays.copyOf(solution.getBreakpoints(), solution.getBreakpoints().length));
-        copy.setEvaluation(solution.getEvaluation());
-        copy.setWeights(Arrays.copyOf(solution.getWeights(), solution.getWeights().length));
+        Solution clone = (Solution) solution.clone();
 
         Solution[] neighborSolutions = new Solution[solutionsCount];
 
         for (int i = 0; i < solutionsCount; i++) {
-            Solution newSolution =  new Solution(Arrays.copyOf(solution.getCitiesOrder(), solution.getCitiesOrder().length), Arrays.copyOf(solution.getBreakpoints(), solution.getBreakpoints().length));
-            copy.setEvaluation(solution.getEvaluation());
+            Solution newSolution = (Solution) solution.clone();
 
             if (RANDOM.nextDouble() >= 0.5) {
 
                 // change cities order
                 for (int j = 0; j < maxOrderChanges; j++) {
-                    int indexA = getFirstRandomCity(copy);
-                    int indexB = getFirstRandomCity(copy);
+                    int indexA = getFirstRandomCity(clone);
+                    int indexB = getFirstRandomCity(clone);
                     switchCities(newSolution, indexA, indexB);
                 }
 

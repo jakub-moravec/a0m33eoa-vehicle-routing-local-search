@@ -5,7 +5,9 @@ import model.ModelHolder;
 import model.Solution;
 
 /**
- * TODO
+ * Evaluator of the solution.
+ * Euclidean distance is used to evaluate solution.
+ * Tested.
  * TODO generalize
  */
 public class Evaluator {
