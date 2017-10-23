@@ -14,6 +14,8 @@ public class Solution {
 
     private int[] breakpoints;
 
+    private double[] weights;
+
     private double evaluation;
 
     public Solution(int[] citiesOrder, int[] breakpoints) {
@@ -59,6 +61,14 @@ public class Solution {
 
     public void setEvaluation(double evaluation) {
         this.evaluation = evaluation;
+    }
+
+    public double[] getWeights() {
+        return weights;
+    }
+
+    public void setWeights(double[] weights) {
+        this.weights = weights;
     }
 
     @Override

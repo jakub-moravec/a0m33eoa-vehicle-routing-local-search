@@ -18,6 +18,8 @@ public class Evaluator {
     public static double evaluate(Solution solution) {
         double longestPath = -1;
 
+        solution.setWeights(new double[solution.getCitiesOrder().length]);
+
         for (int traveler = 0; traveler < Configuration.getNumberOfTravelers(); traveler++) {
             int start = solution.getTravelersStart(traveler);
             int end = solution.getTravelersEnd(traveler);
@@ -27,13 +29,18 @@ public class Evaluator {
             }
 
             double travelersPath = calculateDistance(ModelHolder.getModel().get(0), ModelHolder.getModel().get(solution.getCitiesOrder()[start]));
+            solution.getWeights()[start] += travelersPath;
             for (int i = start; i < end ; i++) {
                 int cityX = solution.getCitiesOrder()[i];
                 int cityY = solution.getCitiesOrder()[i+1];
                 double distance = calculateDistance(ModelHolder.getModel().get(cityX), ModelHolder.getModel().get(cityY));
                 travelersPath += distance;
+                solution.getWeights()[i] += distance;
+                solution.getWeights()[i+1] += distance;
             }
-            travelersPath += calculateDistance(ModelHolder.getModel().get(solution.getCitiesOrder()[end]), ModelHolder.getModel().get(0));
+            double returnDistance = calculateDistance(ModelHolder.getModel().get(solution.getCitiesOrder()[end]), ModelHolder.getModel().get(0));
+            travelersPath += returnDistance;
+            solution.getWeights()[end] += returnDistance;
 
             if (travelersPath > longestPath) {
                 longestPath = travelersPath;

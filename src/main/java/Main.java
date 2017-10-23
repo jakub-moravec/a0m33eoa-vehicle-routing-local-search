@@ -17,7 +17,7 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        InputReader.read("src/main/resources/data/mTSP_50.data");
+        InputReader.read("src/main/resources/data/mTSP_200.data");
 
         Solution solution = getInitialSolution();
         printSolution(0, solution);

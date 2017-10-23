@@ -2,6 +2,7 @@ package algorithm;
 
 import model.Solution;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -9,9 +10,9 @@ import java.util.Random;
  */
 public class BestNeighborAlgorithm {
 
-    private static final int NEIGHBOR_SOLUTION_COUNT = 5;
-    private static final int MAX_ORDER_CHANGES = 1;
-    private static final double BREAKS_CHANGE_RATIO = 0.1;
+    private static final int NEIGHBOR_SOLUTION_COUNT = 10;
+    private static final int MAX_ORDER_CHANGES = 2;
+    private static final double BREAKS_CHANGE_RATIO = 0.3;
 
     private static final Random RANDOM = new Random();
 
@@ -50,30 +51,37 @@ public class BestNeighborAlgorithm {
         for (int i = 0; i < solutionsCount; i++) {
             Solution newSolution = new Solution(solution.getCitiesOrder(), solution.getBreakpoints());
 
-            // change cities order
-            for (int j = 0; j < maxOrderChanges; j++) {
-                int[] cities = newSolution.getCitiesOrder();
-                int indexA = RANDOM.nextInt(cities.length);
-                int indexB = RANDOM.nextInt(cities.length);
-                int cityA = cities[indexA];
-                int cityB = cities[indexB];
-                cities[indexA] = cityB;
-                cities[indexB] = cityA;
-                newSolution.setCitiesOrder(cities);
-            }
+            if (RANDOM.nextDouble() >= 0.5) {
 
-            // change breaks
-            for (int j = 0; j < newSolution.getBreakpoints().length; j++) {
-                double pivot = RANDOM.nextDouble();
-                if (pivot <= breaksChangeRatio / 2d) {
-                    if(newSolution.getBreakpoints()[j] > 0) {
-                        newSolution.getBreakpoints()[j]--;
-                    }
-                } else if (pivot >= 1d - (breaksChangeRatio / 2d)) {
-                    if(newSolution.getBreakpoints()[j] < newSolution.getCitiesOrder().length) {
-                        newSolution.getBreakpoints()[j]++;
+                // change cities order
+                for (int j = 0; j < maxOrderChanges; j++) {
+                    int[] cities = newSolution.getCitiesOrder();
+                    int indexA = getFirstRandomCity(solution);
+                    int indexB = getFirstRandomCity(solution);
+//                int indexB = indexA < cities.length - 1 ? indexA + 1 : 0;
+                    int cityA = cities[indexA];
+                    int cityB = cities[indexB];
+                    cities[indexA] = cityB;
+                    cities[indexB] = cityA;
+                    newSolution.setCitiesOrder(cities);
+                }
+
+            } else {
+
+                // change breaks
+                for (int j = 0; j < newSolution.getBreakpoints().length; j++) {
+                    double pivot = RANDOM.nextDouble();
+                    if (pivot <= breaksChangeRatio / 2d) {
+                        if (newSolution.getBreakpoints()[j] > 0) {
+                            newSolution.getBreakpoints()[j]--;
+                        }
+                    } else if (pivot >= 1d - (breaksChangeRatio / 2d)) {
+                        if (newSolution.getBreakpoints()[j] < newSolution.getCitiesOrder().length) {
+                            newSolution.getBreakpoints()[j]++;
+                        }
                     }
                 }
+                Arrays.sort(newSolution.getBreakpoints());
             }
 
             neighborSolutions[i] = newSolution;
@@ -81,5 +89,20 @@ public class BestNeighborAlgorithm {
 
 
         return neighborSolutions;
+    }
+
+    private static int getFirstRandomCity(Solution solution) {
+        double weightSum = Arrays.stream(solution.getWeights()).sum();
+        double currentWight = 0;
+        double pivot = RANDOM.nextDouble() * weightSum;
+
+        for (int i = 0; i < solution.getWeights().length; i++) {
+            currentWight += solution.getWeights()[i];
+            if(currentWight > pivot) {
+                return i;
+            }
+        }
+
+        return 0;
     }
 }
