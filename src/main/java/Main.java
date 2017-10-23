@@ -27,8 +27,8 @@ public class Main {
             Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
             if (candidate.getEvaluation() < solution.getEvaluation()) {
                 solution = candidate;
+                printSolution(i+1, solution);
             }
-            printSolution(i+1, solution);
         }
     }
 
