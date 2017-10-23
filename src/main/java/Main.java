@@ -21,17 +21,19 @@ public class Main {
 
         Solution solution = getInitialSolution();
         printSolution(0, solution);
+//        DrawGraph.createAndShowGui(solution);
 
-
-        for (int i = 0; ; i ++) {
+        int generation = 0;
+        do {
             Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
             if (candidate.getEvaluation() < solution.getEvaluation()) {
                 solution = candidate;
-                printSolution(i+1, solution);
-//                DrawGraph.createAndShowGui(solution);
+                printSolution(generation+1, solution);
             }
+            generation++;
+        } while (generation < 200000);
 
-        }
+//        DrawGraph.createAndShowGui(solution);
     }
 
     /**
