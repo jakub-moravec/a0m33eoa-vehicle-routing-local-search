@@ -1,26 +1,33 @@
 package ui;
 
+import model.ModelHolder;
+import model.Solution;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class DrawGraph extends JPanel {
-    private static final int MAX_SCORE = 20;
     private static final int PREF_W = 800;
-    private static final int PREF_H = 650;
-    private static final int BORDER_GAP = 30;
+    private static final int PREF_H = 800;
     private static final Color GRAPH_COLOR = Color.green;
     private static final Color GRAPH_POINT_COLOR = new Color(150, 50, 50, 180);
     private static final Stroke GRAPH_STROKE = new BasicStroke(3f);
     private static final int GRAPH_POINT_WIDTH = 12;
-    private static final int Y_HATCH_CNT = 10;
 
-    private List<Integer> scores;
+    private Solution solution;
 
-    public DrawGraph(List<Integer> scores) {
-        this.scores = scores;
+    public DrawGraph(Solution solution) {
+        this.solution = solution;
+    }
+
+    private Point cityToPoint(int cityIndex) {
+        List<Integer[]> model = ModelHolder.getModel();
+        Integer[] city = ModelHolder.getModel().get(cityIndex);
+        Point point = new Point(city[0] / 3, city[1] / 3); // todo scale better
+        return point;
     }
 
     @Override
@@ -29,37 +36,16 @@ public class DrawGraph extends JPanel {
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        double xScale = ((double) getWidth() - 2 * BORDER_GAP) / (scores.size() - 1);
-        double yScale = ((double) getHeight() - 2 * BORDER_GAP) / (MAX_SCORE - 1);
-
-        List<Point> graphPoints = new ArrayList<Point>();
-        for (int i = 0; i < scores.size(); i++) {
-            int x1 = (int) (i * xScale + BORDER_GAP);
-            int y1 = (int) ((MAX_SCORE - scores.get(i)) * yScale + BORDER_GAP);
-            graphPoints.add(new Point(x1, y1));
+        List<Point> graphPoints = new ArrayList<>();
+        for (int i = 0; i < solution.getCitiesOrder().length; i++) {
+            for (int j = 0; j < solution.getBreakpoints().length; j++) {
+                if (i == solution.getBreakpoints()[j]) {
+                    graphPoints.add(cityToPoint(0));
+                }
+            }
+            graphPoints.add(cityToPoint(i));
         }
-
-        // create x and y axes
-        g2.drawLine(BORDER_GAP, getHeight() - BORDER_GAP, BORDER_GAP, BORDER_GAP);
-        g2.drawLine(BORDER_GAP, getHeight() - BORDER_GAP, getWidth() - BORDER_GAP, getHeight() - BORDER_GAP);
-
-        // create hatch marks for y axis.
-        for (int i = 0; i < Y_HATCH_CNT; i++) {
-            int x0 = BORDER_GAP;
-            int x1 = GRAPH_POINT_WIDTH + BORDER_GAP;
-            int y0 = getHeight() - (((i + 1) * (getHeight() - BORDER_GAP * 2)) / Y_HATCH_CNT + BORDER_GAP);
-            int y1 = y0;
-            g2.drawLine(x0, y0, x1, y1);
-        }
-
-        // and for x axis
-        for (int i = 0; i < scores.size() - 1; i++) {
-            int x0 = (i + 1) * (getWidth() - BORDER_GAP * 2) / (scores.size() - 1) + BORDER_GAP;
-            int x1 = x0;
-            int y0 = getHeight() - BORDER_GAP;
-            int y1 = y0 - GRAPH_POINT_WIDTH;
-            g2.drawLine(x0, y0, x1, y1);
-        }
+        graphPoints.add(cityToPoint(0));
 
         Stroke oldStroke = g2.getStroke();
         g2.setColor(GRAPH_COLOR);
@@ -88,15 +74,13 @@ public class DrawGraph extends JPanel {
         return new Dimension(PREF_W, PREF_H);
     }
 
-    private static void createAndShowGui() {
-        List<Integer> scores = new ArrayList<Integer>();
-        Random random = new Random();
-        int maxDataPoints = 16;
-        int maxScore = 20;
-        for (int i = 0; i < maxDataPoints ; i++) {
-            scores.add(random.nextInt(maxScore));
-        }
-        DrawGraph mainPanel = new DrawGraph(scores);
+    /**
+     * Draws graph.
+     * @param solution solution
+     * @throws IOException if something wents wrong
+     */
+    public static void createAndShowGui(Solution solution) throws IOException {
+        DrawGraph mainPanel = new DrawGraph(solution);
 
         JFrame frame = new JFrame("DrawGraph");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,11 +90,4 @@ public class DrawGraph extends JPanel {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGui();
-            }
-        });
-    }
 }

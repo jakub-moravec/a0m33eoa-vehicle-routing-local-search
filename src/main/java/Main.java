@@ -28,6 +28,7 @@ public class Main {
             if (candidate.getEvaluation() < solution.getEvaluation()) {
                 solution = candidate;
                 printSolution(i+1, solution);
+//                DrawGraph.createAndShowGui(solution);
             }
         }
     }
