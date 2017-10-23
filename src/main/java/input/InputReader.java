@@ -30,7 +30,7 @@ public class InputReader {
         String line;
         while ((line = br.readLine()) != null) {
             String[] entry = line.split(DELIMITER);
-            model.add(new Integer[]{Integer.valueOf(entry[1]), Integer.valueOf(entry[1])});
+            model.add(new Integer[]{Integer.valueOf(entry[0]), Integer.valueOf(entry[1])});
         }
 
         ModelHolder.setModel(model);
