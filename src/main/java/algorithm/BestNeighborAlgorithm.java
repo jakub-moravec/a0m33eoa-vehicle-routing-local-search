@@ -7,6 +7,7 @@ import java.util.Random;
 
 /**
  * Finds best neighbor solution.
+ * TODO 2-opt
  */
 public class BestNeighborAlgorithm {
 

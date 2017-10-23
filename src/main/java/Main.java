@@ -32,7 +32,7 @@ public class Main {
                 printSolution(generation+1, solution);
             }
             generation++;
-        } while (generation < 200000);
+        } while (generation < 500000);
 
         DrawGraph.createAndShowGui(solution);
     }
@@ -54,7 +54,7 @@ public class Main {
         }
 
         int n = config.Configuration.getNumberOfTravelers();
-        int breakInterval = (model.size() - 1) / n;
+        int breakInterval = (model.size() - 1) / n; // todo podle vzdalenosti, ne poctu
 
         int[] initialBreakpoints = new int[n - 1];
         for (int i = 0; i < n; i++) {
