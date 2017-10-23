@@ -3,6 +3,7 @@ import algorithm.Evaluator;
 import input.InputReader;
 import model.ModelHolder;
 import model.Solution;
+import ui.DrawGraph;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Main {
 
         Solution solution = getInitialSolution();
         printSolution(0, solution);
-//        DrawGraph.createAndShowGui(solution);
+        DrawGraph.createAndShowGui(solution);
 
         int generation = 0;
         do {
@@ -33,7 +34,7 @@ public class Main {
             generation++;
         } while (generation < 200000);
 
-//        DrawGraph.createAndShowGui(solution); TODO fix UI
+        DrawGraph.createAndShowGui(solution);
     }
 
     /**

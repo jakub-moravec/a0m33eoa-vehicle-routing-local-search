@@ -12,7 +12,7 @@ public class BestNeighborAlgorithm {
 
     private static final int NEIGHBOR_SOLUTION_COUNT = 5;
     private static final int MAX_ORDER_CHANGES = 2;
-    private static final double BREAKS_CHANGE_RATIO = 0.01;
+    private static final double BREAKS_CHANGE_RATIO = 0.5;
 
     private static final Random RANDOM = new Random();
 
