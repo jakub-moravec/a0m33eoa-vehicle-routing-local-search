@@ -10,9 +10,9 @@ import java.util.Random;
  */
 public class BestNeighborAlgorithm {
 
-    private static final int NEIGHBOR_SOLUTION_COUNT = 10;
+    private static final int NEIGHBOR_SOLUTION_COUNT = 5;
     private static final int MAX_ORDER_CHANGES = 2;
-    private static final double BREAKS_CHANGE_RATIO = 0.3;
+    private static final double BREAKS_CHANGE_RATIO = 0.01;
 
     private static final Random RANDOM = new Random();
 
@@ -55,15 +55,9 @@ public class BestNeighborAlgorithm {
 
                 // change cities order
                 for (int j = 0; j < maxOrderChanges; j++) {
-                    int[] cities = newSolution.getCitiesOrder();
                     int indexA = getFirstRandomCity(solution);
                     int indexB = getFirstRandomCity(solution);
-//                int indexB = indexA < cities.length - 1 ? indexA + 1 : 0;
-                    int cityA = cities[indexA];
-                    int cityB = cities[indexB];
-                    cities[indexA] = cityB;
-                    cities[indexB] = cityA;
-                    newSolution.setCitiesOrder(cities);
+                    switchCities(newSolution, indexA, indexB);
                 }
 
             } else {
@@ -89,6 +83,33 @@ public class BestNeighborAlgorithm {
 
 
         return neighborSolutions;
+    }
+
+    private static void switchCities(Solution solution, int indexA, int indexB) {
+        int[] cities = solution.getCitiesOrder();
+        int cityA = cities[indexA];
+        int cityB = cities[indexB];
+        cities[indexA] = cityB;
+        cities[indexB] = cityA;
+        solution.setCitiesOrder(cities);
+    }
+
+    private static int findBestSwitch(Solution solution, int indexA) {
+        double bestCandidateEvaluation = solution.getEvaluation();
+        int bestCandidate = indexA;
+
+        for (int i = 0; i < solution.getCitiesOrder().length; i++) {
+            if (i != indexA) {
+               Solution candidate = new Solution(solution.getCitiesOrder(), solution.getBreakpoints());
+               switchCities(candidate, indexA, i);
+               double candidateEvaluation = Evaluator.evaluate(candidate);
+               if(candidateEvaluation < bestCandidateEvaluation) {
+                   bestCandidateEvaluation = candidateEvaluation;
+                   bestCandidate = i;
+               }
+            }
+        }
+        return bestCandidate;
     }
 
     private static int getFirstRandomCity(Solution solution) {

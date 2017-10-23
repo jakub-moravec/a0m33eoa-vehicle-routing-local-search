@@ -17,7 +17,7 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        InputReader.read("src/main/resources/data/mTSP_200.data");
+        InputReader.read("src/main/resources/data/mTSP_50.data");
 
         Solution solution = getInitialSolution();
         printSolution(0, solution);
@@ -27,8 +27,8 @@ public class Main {
             Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
             if (candidate.getEvaluation() < solution.getEvaluation()) {
                 solution = candidate;
+                printSolution(i+1, solution);
             }
-            printSolution(i+1, solution);
         }
     }
 
