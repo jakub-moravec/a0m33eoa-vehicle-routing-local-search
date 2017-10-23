@@ -30,6 +30,7 @@ public class Main {
                 printSolution(i+1, solution);
 //                DrawGraph.createAndShowGui(solution);
             }
+
         }
     }
 
