@@ -9,6 +9,11 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+/**
+ * Test class.
+ *
+ * @author moravja8
+ */
 public class EuclideanFitnessEvaluatorTest {
 
     @Test

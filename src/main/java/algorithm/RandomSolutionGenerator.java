@@ -15,18 +15,13 @@ import java.util.stream.IntStream;
  *
  * @author moravja8
  */
-public class RandomSolutionGenerator implements SolutionGenerator{
+public class RandomSolutionGenerator{
 
     /**
-     * TODO
-     * @return
+     * Generates random (initial) solution
+     * @return random solution
      */
-    @Override
-    public Solution generateSolution() {
-
-        Solution solution = new Solution();
-
-
+    public static Solution generateSolution() {
         List<Integer> cities = new ArrayList<>();
 
         // add cities - except the pivot city
@@ -39,18 +34,24 @@ public class RandomSolutionGenerator implements SolutionGenerator{
         cities.add(cities.size(), 0); // add pivot to end
 
         // get one travelers current cost
-        EuclideanFitnessEvaluator.calculateFitness(new Solution(cities));
+        double expectedCostPerTraveler = EuclideanFitnessEvaluator.calculateFitness(new Solution(cities)) / (double) Configuration.getNumberOfTravelers();
 
-        //fixme
         // add breakpoint cities
-        for (int i = 0; i < Configuration.getNumberOfTravelers(); i++) {
-            cities.add(-1);
+        double currentPath = 0;
+        int travelers = 0;
+        for (int i = 0; i < cities.size() - 1; i++) {
+            if (currentPath >= expectedCostPerTraveler && travelers < Configuration.getNumberOfTravelers() - 1) {
+                cities.add(i, 0);
+                currentPath = 0;
+                travelers++;
+            }
+
+            int cityX = cities.get(i);
+            int cityY = cities.get(i+1);
+
+            currentPath += EuclideanFitnessEvaluator.calculateDistance(ModelHolder.getModel().get(cityX), ModelHolder.getModel().get(cityY));
         }
 
-
-
-//        solution.setCitiesOrder();
-
-        return solution;
+        return new Solution(cities);
     }
 }
