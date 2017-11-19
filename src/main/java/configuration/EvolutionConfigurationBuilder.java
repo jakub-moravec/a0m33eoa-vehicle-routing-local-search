@@ -133,9 +133,6 @@ public class EvolutionConfigurationBuilder<V, T, K extends Comparable<K>, L exte
     }
 
     public EvolutionConfiguration<V, T, K, L> build() {
-
-        //TODO check
-
         return new EvolutionConfiguration<>(fitnessTweakingStrategy, fitnessAssessment, populationInitialization,
                 crossover, mutation, replacement, selector, isParallel, isFitnessIsMaximized, statisticsCreation, populationSize,
                 probabilityOfCrossover, terminationCondition, decoding);

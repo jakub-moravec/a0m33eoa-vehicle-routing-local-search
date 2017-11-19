@@ -1,17 +1,18 @@
 package model;
 
 import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Solution.
  *
  * Contains cities order.
- *
- * TODO add breakpoints as special cities
  */
 @Getter
+@Setter
 public class Solution {
 
     private List<Integer> citiesOrder;
@@ -19,6 +20,7 @@ public class Solution {
     private double evaluation;
 
     public Solution() {
+        citiesOrder = new ArrayList<>();
     }
 
     public Solution(List<Integer> citiesOrder) {
@@ -27,7 +29,7 @@ public class Solution {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         // cities orders
         sb.append("[");
@@ -44,5 +46,13 @@ public class Solution {
         sb.append("[").append(evaluation).append("]");
 
         return sb.toString();
+    }
+
+    @Override
+    public Solution clone() {
+        Solution clone = new Solution();
+        clone.setEvaluation(this.getEvaluation());
+        clone.setCitiesOrder(new ArrayList<>(this.citiesOrder));
+        return clone;
     }
 }
