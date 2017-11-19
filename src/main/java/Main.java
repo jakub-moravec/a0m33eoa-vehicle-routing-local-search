@@ -32,7 +32,7 @@ public class Main {
                 printSolution(generation+1, solution);
             }
             generation++;
-        } while (generation < 500000);
+        } while (generation < 1000000);
 
         DrawGraph.createAndShowGui(solution);
     }
