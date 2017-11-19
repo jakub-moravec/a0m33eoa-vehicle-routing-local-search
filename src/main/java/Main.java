@@ -1,5 +1,3 @@
-import algorithm.BestNeighborAlgorithm;
-import algorithm.Evaluator;
 import input.InputReader;
 import model.ModelHolder;
 import model.Solution;
@@ -26,12 +24,13 @@ public class Main {
 
         int generation = 0;
         do {
-            Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
-            if (candidate.getEvaluation() < solution.getEvaluation()) {
-                solution = candidate;
-                printSolution(generation+1, solution);
-            }
-            generation++;
+//            FIXME
+//            Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
+//            if (candidate.getEvaluation() < solution.getEvaluation()) {
+//                solution = candidate;
+//                printSolution(generation+1, solution);
+//            }
+//            generation++;
         } while (generation < 1000000);
 
         DrawGraph.createAndShowGui(solution);
@@ -63,10 +62,11 @@ public class Main {
             }
         }
 
-        Solution initialSolution = new Solution(initialCities, initialBreakpoints);
-        initialSolution.setEvaluation(Evaluator.evaluate(initialSolution));
+//        fixme
+//        Solution initialSolution = new Solution(initialCities, initialBreakpoints);
+//        initialSolution.setEvaluation(EuclideanFitnessEvaluator.evaluate(initialSolution));
 
-        return initialSolution;
+        return null;
     }
 
     private static void printSolution(int generation, Solution solution) {

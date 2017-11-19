@@ -1,6 +1,7 @@
-package algorithm;
+package localsearch;
 
 import config.Configuration;
+import evaluation.EuclideanFitnessEvaluator;
 import model.ModelHolder;
 import model.Solution;
 import org.junit.Assert;
@@ -8,7 +9,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class EvaluatorTest {
+public class EuclideanFitnessEvaluatorTest {
 
     @Test
     public void evaluate() throws Exception {
@@ -22,10 +23,13 @@ public class EvaluatorTest {
         ModelHolder.setModel(Arrays.asList(model));
 
         Solution[] inputs = new Solution[] {
-                new Solution(new int[]{1, 2, 3, 4}, new int[]{2}),
-                new Solution(new int[]{1, 2, 3, 4}, new int[]{1,2}),
-                new Solution(new int[]{1, 2, 4, 3}, new int[]{4})
+                new Solution(Arrays.asList(0, 1, 2, 0, 3, 4, 0)),
+                new Solution(Arrays.asList(0, 1, 0, 2, 0, 3, 4, 0)),
+                new Solution(Arrays.asList(0, 1, 2, 4, 3, 0))
         };
+
+        Integer[] numberOfTravelers = new Integer[]{2, 3, 1};
+
         double[] expectedResults = new double[] {
                 9.65685425,
                 9.65685425,
@@ -36,9 +40,8 @@ public class EvaluatorTest {
 
         for (int i = 0; i < inputs.length; i++) {
             Solution solution = inputs[i];
-            int numberOfTravelers = solution.getBreakpoints().length + 1;
-            Configuration.setNumberOfTravelers(numberOfTravelers);
-            double evaluation = Evaluator.evaluate(solution);
+            Configuration.setNumberOfTravelers(numberOfTravelers[i]);
+            double evaluation = EuclideanFitnessEvaluator.calculateFitness(solution);
             Assert.assertEquals("Bad result in testcase " + i + ".", expectedResults[i], evaluation, 0.00001);
         }
     }
@@ -65,7 +68,7 @@ public class EvaluatorTest {
         };
 
         for (int i = 0; i < inputs.length; i++) {
-            double result = Evaluator.calculateDistance(new Integer[] {inputs[i][0], inputs[i][1]}, new Integer[] {inputs[i][2], inputs[i][3]});
+            double result = EuclideanFitnessEvaluator.calculateDistance(new Integer[] {inputs[i][0], inputs[i][1]}, new Integer[] {inputs[i][2], inputs[i][3]});
             Assert.assertEquals(expectedResults[i], result, 0.00001);
         }
     }
