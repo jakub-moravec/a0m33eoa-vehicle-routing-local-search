@@ -1,17 +1,30 @@
 package config;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Project configuration.
  */
 public class Configuration {
 
-    private static int NUMBER_OF_TRAVELERS = 3;
+    @Getter
+    @Setter
+    private static int numberOfTravelers = 3;
 
-    public static int getNumberOfTravelers() {
-        return NUMBER_OF_TRAVELERS;
-    }
+    @Getter
+    @Setter
+    private static int maxEpoch = 100;
 
-    public static void setNumberOfTravelers(int numberOfTravelers) {
-        NUMBER_OF_TRAVELERS = numberOfTravelers;
-    }
+    @Getter
+    @Setter
+    private static int populationSize = 50;
+
+    @Getter
+    @Setter
+    private static double probabilityOfMutation = 0.01;
+
+    @Getter
+    @Setter
+    private static double probabilityOfCrossover = 0.75;
 }

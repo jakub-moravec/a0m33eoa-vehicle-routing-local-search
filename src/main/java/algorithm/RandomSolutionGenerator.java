@@ -30,11 +30,8 @@ public class RandomSolutionGenerator{
         // make it random
         Collections.shuffle(cities);
 
-        cities.add(0, 0); // add pivot to start
-        cities.add(cities.size(), 0); // add pivot to end
-
         // get one travelers current cost
-        double expectedCostPerTraveler = EuclideanFitnessEvaluator.calculateFitness(new Solution(cities)) / (double) Configuration.getNumberOfTravelers();
+        double expectedCostPerTraveler = Math.floor(EuclideanFitnessEvaluator.calculateFitness(new Solution(cities)) / (double) Configuration.getNumberOfTravelers());
 
         // add breakpoint cities
         double currentPath = 0;

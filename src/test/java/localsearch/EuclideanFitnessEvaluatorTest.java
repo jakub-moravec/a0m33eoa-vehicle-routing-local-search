@@ -28,9 +28,9 @@ public class EuclideanFitnessEvaluatorTest {
         ModelHolder.setModel(Arrays.asList(model));
 
         Solution[] inputs = new Solution[] {
-                new Solution(Arrays.asList(0, 1, 2, 0, 3, 4, 0)),
-                new Solution(Arrays.asList(0, 1, 0, 2, 0, 3, 4, 0)),
-                new Solution(Arrays.asList(0, 1, 2, 4, 3, 0))
+                new Solution(Arrays.asList(1, 2, 0, 3, 4)),
+                new Solution(Arrays.asList(1, 0, 2, 0, 3, 4)),
+                new Solution(Arrays.asList(1, 2, 4, 3))
         };
 
         Integer[] numberOfTravelers = new Integer[]{2, 3, 1};

@@ -3,6 +3,8 @@ package evaluation;
 import model.ModelHolder;
 import model.Solution;
 
+import java.util.Arrays;
+
 /**
  * EuclideanFitnessEvaluator of the solution.
  * Euclidean distance is used to evaluate solution.
@@ -18,22 +20,39 @@ public class EuclideanFitnessEvaluator {
     public static double calculateFitness(Solution solution) {
         double longestPath = 0;
 
-        double currentPath = 0;
+        int[] visitedCities = new int[ModelHolder.getModel().size()];
+        visitedCities[0] = 1;
+
+        double currentPath = calculateDistance(ModelHolder.getModel().get(0), ModelHolder.getModel().get(solution.getCitiesOrder().get(0)));
         for (int i = 0; i < solution.getCitiesOrder().size() - 1; i++) {
             int cityX = solution.getCitiesOrder().get(i);
             int cityY = solution.getCitiesOrder().get(i+1);
 
+            visitedCities[cityX] = 1;
+            visitedCities[cityY] = 1;
+
             double distance = calculateDistance(ModelHolder.getModel().get(cityX), ModelHolder.getModel().get(cityY));
             currentPath += distance;
 
+            // return of last traveler to pivot
+            if (i + 1 == solution.getCitiesOrder().size() - 1) {
+                currentPath += calculateDistance(ModelHolder.getModel().get(cityY), ModelHolder.getModel().get(0));
+                longestPath = Math.max(longestPath, currentPath);
+            }
+
             // end for one traveler and beginning for another
-            if (i > 0 && cityY == 0) {
+            if (cityY == 0) {
                 longestPath = Math.max(longestPath, currentPath);
                 currentPath = 0;
             }
         }
 
-        return longestPath;
+        // check all cities were visited
+        if (Arrays.stream(visitedCities).sum() < ModelHolder.getModel().size()) {
+            return Double.MAX_VALUE;
+        }
+
+        return longestPath > 0 ? longestPath : Double.MAX_VALUE;
     }
 
     /**

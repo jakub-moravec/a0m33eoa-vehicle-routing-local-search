@@ -1,13 +1,16 @@
 import algorithm.RandomSolutionGenerator;
+import config.Configuration;
 import configuration.EvolutionConfiguration;
 import configuration.EvolutionConfigurationBuilder;
 import cycle.EvolutionExecutor;
 import evaluation.EuclideanFitnessEvaluator;
+import input.InputReader;
 import model.Solution;
 import templates.Individual;
 import templates.IndividualWithAssignedFitness;
 import templates.StatisticsPerEpoch;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,22 +27,22 @@ public class Main {
     private static final Random RANDOM = new Random();
     private final static Logger logger = Logger.getLogger(Main.class.getName());
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        InputReader.read("src/main/resources/data/mTSP_50.data");
+        // TODO draw graph
+
         //types by order: genes, decoded genes - solution, fitness, container with statistics
         EvolutionConfiguration<Solution, Solution, Double, MyStatisticsPerEpoch> evolutionConfiguration = (new EvolutionConfigurationBuilder<Solution, Solution, Double, MyStatisticsPerEpoch>())
                 //uniform crossover
                 .crossover((firstParent, secondParent) -> {
-                    Solution firstSetOfGenes = new Solution(), secondSetOfGenes = new Solution();
+                    Solution firstSetOfGenes = firstParent.getGenes().clone();
+                    Solution secondSetOfGenes = secondParent.getGenes().clone();
                     // Each gene is inherited either from the 1st or the 2nd parent
                     for (int i = 0; i < firstParent.getGenes().getCitiesOrder().size(); i++) {
                         if (RANDOM.nextBoolean()) {
-                            firstSetOfGenes.getCitiesOrder().set(i, firstParent.getGenes().getCitiesOrder().get(i));
-                        } else {
                             firstSetOfGenes.getCitiesOrder().set(i, secondParent.getGenes().getCitiesOrder().get(i));
                         }
                         if (RANDOM.nextBoolean()) {
-                            secondSetOfGenes.getCitiesOrder().set(i, secondParent.getGenes().getCitiesOrder().get(i));
-                        } else {
                             secondSetOfGenes.getCitiesOrder().set(i, firstParent.getGenes().getCitiesOrder().get(i));
                         }
                     }
@@ -53,9 +56,12 @@ public class Main {
                 .mutation(individual -> {
                     Solution genes = individual.getGenes().clone();
                     for (int i = 0; i < genes.getCitiesOrder().size(); i++) {
-                        // Mutate each gene with probability Pm.
-                        if (RANDOM.nextDouble() < 0.01) {
-                            genes.getCitiesOrder().set(i, (genes.getCitiesOrder().get(i) + 1) % 2);    // swap between 0 and 1 FIXME záměna dvou bitů, ne bitflip
+                        // Mutation switches two cities
+                        if (RANDOM.nextDouble() < Configuration.getProbabilityOfMutation()) {
+                            int j = RANDOM.nextInt(genes.getCitiesOrder().size());
+                            int city = genes.getCitiesOrder().get(i);
+                            genes.getCitiesOrder().set(i, genes.getCitiesOrder().get(i));
+                            genes.getCitiesOrder().set(j, city);
                         }
                     }
                     return Optional.of(new Individual<>(genes));
@@ -91,12 +97,12 @@ public class Main {
                 .decoding(Main::decode)
                 //how fitness is computed
                 .fitnessAssessment(EuclideanFitnessEvaluator::calculateFitness)
-                .fitnessIsMaximized(true)
+                .fitnessIsMaximized(false)
                 .parallel(true)
-                .probabilityOfCrossover(0.75)
-                .populationSize(50)
+                .probabilityOfCrossover(Configuration.getProbabilityOfCrossover())
+                .populationSize(Configuration.getPopulationSize())
                 //when to terminate evolution, after 100 epochs has been reached
-                .terminationCondition(epochs -> epochs.size() < 100)
+                .terminationCondition(epochs -> epochs.size() < Configuration.getMaxEpoch())
                 //use own statistics
                 .statisticsCreation(MyStatisticsPerEpoch::new)
                 .build();
@@ -104,6 +110,7 @@ public class Main {
         List<MyStatisticsPerEpoch> statistics = evolutionExecutor.run();
         long time = statistics.stream().mapToLong(StatisticsPerEpoch::getExecution).sum();
         MyStatisticsPerEpoch bestEpoch = statistics.stream().max(Comparator.comparing(stats -> stats.getBestIndividual().getFitness())).get();
+        // TODO draw graph
         logger.info("Executed in " + time + ", best solution in epoch " + bestEpoch.getEpoch());
     }
 
