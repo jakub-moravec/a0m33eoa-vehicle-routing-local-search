@@ -5,14 +5,10 @@ import configuration.EvolutionConfigurationBuilder;
 import cycle.EvolutionExecutor;
 import evaluation.EuclideanFitnessEvaluator;
 import input.InputReader;
-import lombok.Getter;
-import lombok.Setter;
 import model.Solution;
-import selection.TournamentSelectionStrategy;
 import templates.Individual;
 import templates.IndividualWithAssignedFitness;
 import templates.StatisticsPerEpoch;
-import templates.operations.SelectorStrategy;
 import ui.DrawGraph;
 
 import java.io.IOException;
@@ -32,11 +28,6 @@ public class Main {
     //parameters + configuration
     private static final Random RANDOM = new Random();
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
-
-    //strategies
-    @Getter
-    @Setter
-    private static SelectorStrategy<Solution, Solution, Double> selectorStrategy = new TournamentSelectionStrategy();
 
     public static void main(String[] args) throws IOException {
         InputReader.read("src/main/resources/data/mTSP_50.data");
@@ -115,12 +106,12 @@ public class Main {
                     return Optional.of(new Individual<>(mutatedSolution));
                 })
                 // tournament selection
-                .selector(population -> selectorStrategy.select(population))
+                .selector(population -> Configuration.getSelectorStrategy().select(population))
                 //generational replacement strategy. keep nothing from previous population
                 .replacement(currentPopulation -> {
                     List<IndividualWithAssignedFitness<Solution, Solution, Double>> newPopulation = new ArrayList<>();
                     for (int i = 0; i < Configuration.getIndividualsToKeep(); i++) {
-                        newPopulation.add(selectorStrategy.select(currentPopulation));
+                        newPopulation.add(Configuration.getSelectorStrategy().select(currentPopulation));
                     }
                     return newPopulation;
                 })

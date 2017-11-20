@@ -2,6 +2,9 @@ package configuration;
 
 import lombok.Getter;
 import lombok.Setter;
+import model.Solution;
+import selection.TournamentSelectionStrategy;
+import templates.operations.SelectorStrategy;
 
 /**
  * Algorithm configuration.
@@ -10,6 +13,7 @@ import lombok.Setter;
  */
 public class Configuration {
 
+    // parameters
     @Getter
     @Setter
     private static int numberOfTravelers = 3;
@@ -37,4 +41,9 @@ public class Configuration {
     @Getter
     @Setter
     private static int individualsToKeep = 20;
+
+    //strategies
+    @Getter
+    @Setter
+    private static SelectorStrategy<Solution, Solution, Double> selectorStrategy = new TournamentSelectionStrategy();
 }
