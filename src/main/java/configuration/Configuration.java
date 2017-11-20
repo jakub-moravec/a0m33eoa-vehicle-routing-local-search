@@ -20,7 +20,7 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int populationSize = 50;
+    private static int populationSize = 100;
 
     @Getter
     @Setter
@@ -32,5 +32,9 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int tournamentCandidates = 5;
+    private static int tournamentCandidates = 10;
+
+    @Getter
+    @Setter
+    private static int individualsToKeep = 20;
 }

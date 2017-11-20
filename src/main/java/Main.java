@@ -5,10 +5,14 @@ import configuration.EvolutionConfigurationBuilder;
 import cycle.EvolutionExecutor;
 import evaluation.EuclideanFitnessEvaluator;
 import input.InputReader;
+import lombok.Getter;
+import lombok.Setter;
 import model.Solution;
+import selection.TournamentSelectionStrategy;
 import templates.Individual;
 import templates.IndividualWithAssignedFitness;
 import templates.StatisticsPerEpoch;
+import templates.operations.SelectorStrategy;
 import ui.DrawGraph;
 
 import java.io.IOException;
@@ -28,6 +32,11 @@ public class Main {
     //parameters + configuration
     private static final Random RANDOM = new Random();
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
+
+    //strategies
+    @Getter
+    @Setter
+    private static SelectorStrategy<Solution, Solution, Double> selectorStrategy = new TournamentSelectionStrategy();
 
     public static void main(String[] args) throws IOException {
         InputReader.read("src/main/resources/data/mTSP_50.data");
@@ -106,22 +115,15 @@ public class Main {
                     return Optional.of(new Individual<>(mutatedSolution));
                 })
                 // tournament selection
-                .selector(population -> {
-                    //First member of tournament selection.
-                    int winnerIndex = RANDOM.nextInt(population.size());
-
-                    // Try and check another n randomly chosen individuals.
-                    for (int i = 0; i < Configuration.getTournamentCandidates(); i++) {
-                        int candidate = RANDOM.nextInt(population.size());
-                        if (population.get(candidate).getFitness() < population.get(winnerIndex).getFitness()) {
-                            winnerIndex = candidate;
-                        }
+                .selector(population -> selectorStrategy.select(population))
+                //generational replacement strategy. keep nothing from previous population
+                .replacement(currentPopulation -> {
+                    List<IndividualWithAssignedFitness<Solution, Solution, Double>> newPopulation = new ArrayList<>();
+                    for (int i = 0; i < Configuration.getIndividualsToKeep(); i++) {
+                        newPopulation.add(selectorStrategy.select(currentPopulation));
                     }
-
-                    return population.get(winnerIndex);
+                    return newPopulation;
                 })
-                //generational replacement strategy. keep nothing from previous population // todo maybe keep something
-                .replacement(currentPopulation -> new ArrayList<>())
                 //strategy to initialize single individual - do it randomly
                 .populationInitialization(() -> new Individual<>(RandomSolutionGenerator.generateSolution()))
                 //strategy how to decode genes
