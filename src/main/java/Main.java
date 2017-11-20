@@ -62,7 +62,7 @@ public class Main {
                     int currentCityInTour1 = 0;
                     int currentCityInTour2 = 0;
 
-                    for (int i = 0; i < firstParent.getGenes().getCitiesOrder().size(); i++) {
+                    for (int i = firstParent.getGenes().getCitiesOrder().size() - 1; i >= 0 ; i--) {
                         // get the index of the current city
                         currentCityIndex = (end + i) % firstParent.getGenes().getCitiesOrder().size();
 

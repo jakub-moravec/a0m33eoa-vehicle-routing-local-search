@@ -20,11 +20,11 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int maxEpoch = 1000;
+    private static int maxEpoch = 2000;
 
     @Getter
     @Setter
-    private static int populationSize = 150;
+    private static int populationSize = 200;
 
     @Getter
     @Setter
@@ -36,7 +36,7 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int tournamentCandidates = 15;
+    private static int tournamentCandidates = 20;
 
     @Getter
     @Setter
