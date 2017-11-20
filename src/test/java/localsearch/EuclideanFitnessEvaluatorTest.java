@@ -30,14 +30,20 @@ public class EuclideanFitnessEvaluatorTest {
         Solution[] inputs = new Solution[] {
                 new Solution(Arrays.asList(1, 2, 0, 3, 4)),
                 new Solution(Arrays.asList(1, 0, 2, 0, 3, 4)),
-                new Solution(Arrays.asList(1, 2, 4, 3))
+                new Solution(Arrays.asList(1, 2, 4, 3)),
+                new Solution(Arrays.asList(1, 2, 4, 3, 0)),
+                new Solution(Arrays.asList(0, 1, 2, 4, 3)),
+                new Solution(Arrays.asList(0, 1, 2, 4, 3, 0))
         };
 
-        Integer[] numberOfTravelers = new Integer[]{2, 3, 1};
+        Integer[] numberOfTravelers = new Integer[]{2, 3, 1, 2, 2, 3};
 
         double[] expectedResults = new double[] {
                 9.65685425,
                 9.65685425,
+                17.65685425,
+                17.65685425,
+                17.65685425,
                 17.65685425
         };
 

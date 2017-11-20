@@ -32,8 +32,7 @@ public class RandomSolutionGeneratorTest {
 
             // solution should contain (numberOfTravelers + 1) times pivot
             Assert.assertEquals(travelers - 1, pivotsNbr);
+            Assert.assertEquals(200 + (travelers - 2), solution.getCitiesOrder().size());
         }
-
     }
-
 }

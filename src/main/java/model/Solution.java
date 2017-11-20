@@ -17,8 +17,6 @@ public class Solution {
 
     private List<Integer> citiesOrder;
 
-    private double evaluation;
-
     public Solution() {
         citiesOrder = new ArrayList<>();
     }
@@ -42,16 +40,12 @@ public class Solution {
         }
         sb.append("]");
 
-        //evaluation
-        sb.append("[").append(evaluation).append("]");
-
         return sb.toString();
     }
 
     @Override
     public Solution clone() {
         Solution clone = new Solution();
-        clone.setEvaluation(this.getEvaluation());
         clone.setCitiesOrder(new ArrayList<>(this.citiesOrder));
         return clone;
     }
@@ -63,17 +57,11 @@ public class Solution {
 
         Solution solution = (Solution) o;
 
-        if (Double.compare(solution.evaluation, evaluation) != 0) return false;
         return citiesOrder.equals(solution.citiesOrder);
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = citiesOrder.hashCode();
-        temp = Double.doubleToLongBits(evaluation);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return citiesOrder.hashCode();
     }
 }
