@@ -24,7 +24,7 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int populationSize = 100;
+    private static int populationSize = 150;
 
     @Getter
     @Setter
@@ -32,11 +32,11 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static double probabilityOfCrossover = 0.75;
+    private static double probabilityOfCrossover = 0.5;
 
     @Getter
     @Setter
-    private static int tournamentCandidates = 10;
+    private static int tournamentCandidates = 15;
 
     @Getter
     @Setter
