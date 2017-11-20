@@ -1,10 +1,12 @@
-package config;
+package configuration;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Project configuration.
+ * Algorithm configuration.
+ *
+ * @author moravja8
  */
 public class Configuration {
 
@@ -14,7 +16,7 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int maxEpoch = 100;
+    private static int maxEpoch = 1000;
 
     @Getter
     @Setter
@@ -27,4 +29,8 @@ public class Configuration {
     @Getter
     @Setter
     private static double probabilityOfCrossover = 0.75;
+
+    @Getter
+    @Setter
+    private static int tournamentCandidates = 5;
 }

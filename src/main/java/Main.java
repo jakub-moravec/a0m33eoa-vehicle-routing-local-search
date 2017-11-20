@@ -1,5 +1,5 @@
 import algorithm.RandomSolutionGenerator;
-import config.Configuration;
+import configuration.Configuration;
 import configuration.EvolutionConfiguration;
 import configuration.EvolutionConfigurationBuilder;
 import cycle.EvolutionExecutor;
@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * TODO javadoc
@@ -27,6 +27,7 @@ public class Main {
 
     //parameters + configuration
     private static final Random RANDOM = new Random();
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException {
         InputReader.read("src/main/resources/data/mTSP_50.data");
@@ -104,28 +105,20 @@ public class Main {
                     }
                     return Optional.of(new Individual<>(mutatedSolution));
                 })
-                // selection
+                // tournament selection
                 .selector(population -> {
-                    /*
-                     * roulette - FIXME opravit vzhledem k minimalizaci
-                     */
-                    double overallFitness = 0;
-                    for (IndividualWithAssignedFitness<Solution, Solution, Double> individual : population) {
-                        overallFitness += individual.getFitness();
-                    }
+                    //First member of tournament selection.
+                    int winnerIndex = RANDOM.nextInt(population.size());
 
-                    double bullet = RANDOM.nextDouble() * overallFitness ;
-
-                    double actualFitness = 0;
-                    for (IndividualWithAssignedFitness<Solution, Solution, Double> individual : population) {
-
-                        actualFitness += individual.getFitness();
-                        if (actualFitness > bullet) {
-                            return  individual;
+                    // Try and check another n randomly chosen individuals.
+                    for (int i = 0; i < Configuration.getTournamentCandidates(); i++) {
+                        int candidate = RANDOM.nextInt(population.size());
+                        if (population.get(candidate).getFitness() < population.get(winnerIndex).getFitness()) {
+                            winnerIndex = candidate;
                         }
                     }
 
-                    return null;
+                    return population.get(winnerIndex);
                 })
                 //generational replacement strategy. keep nothing from previous population // todo maybe keep something
                 .replacement(currentPopulation -> new ArrayList<>())
@@ -136,7 +129,7 @@ public class Main {
                 //how fitness is computed
                 .fitnessAssessment(EuclideanFitnessEvaluator::calculateFitness)
                 .fitnessIsMaximized(false)
-                .parallel(false)
+                .parallel(true)
                 .probabilityOfCrossover(Configuration.getProbabilityOfCrossover())
                 .populationSize(Configuration.getPopulationSize())
                 //when to terminate evolution
@@ -147,9 +140,8 @@ public class Main {
         EvolutionExecutor<Solution, Solution, Double, MyStatisticsPerEpoch> evolutionExecutor = new EvolutionExecutor<>(evolutionConfiguration);
         List<MyStatisticsPerEpoch> statistics = evolutionExecutor.run();
         long time = statistics.stream().mapToLong(StatisticsPerEpoch::getExecution).sum();
-        MyStatisticsPerEpoch bestEpoch = statistics.stream().max(Comparator.comparing(stats -> stats.getBestIndividual().getFitness())).get();
-        System.out.println("Executed in " + time + ", best solution in epoch " + bestEpoch.getEpoch());
-        DrawGraph.createAndShowGui(bestEpoch.getBestIndividual().getGenes());
+        LOGGER.info("Executed in " + time + ".");
+        DrawGraph.createAndShowGui(statistics.get(statistics.size() - 1).getBestIndividual().getGenes());
     }
 
     /**

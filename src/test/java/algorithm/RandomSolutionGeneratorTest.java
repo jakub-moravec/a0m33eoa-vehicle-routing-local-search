@@ -1,6 +1,6 @@
 package algorithm;
 
-import config.Configuration;
+import configuration.Configuration;
 import input.InputReader;
 import junit.framework.Assert;
 import model.Solution;

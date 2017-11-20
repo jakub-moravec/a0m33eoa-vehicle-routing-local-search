@@ -1,6 +1,6 @@
 package localsearch;
 
-import config.Configuration;
+import configuration.Configuration;
 import evaluation.EuclideanFitnessEvaluator;
 import model.ModelHolder;
 import model.Solution;
