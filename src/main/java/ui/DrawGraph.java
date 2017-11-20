@@ -3,9 +3,20 @@ package ui;
 import model.ModelHolder;
 import model.Solution;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DrawGraph extends JPanel {
     private static final int PREF_W = 800;
@@ -44,44 +55,37 @@ public class DrawGraph extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // fixme
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-//        super.paintComponent(g);
-//        Graphics2D g2 = (Graphics2D)g;
-//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//
-//        List<Point> graphPoints = new ArrayList<>();
-//        graphPoints.add(cityToPoint(0));
-//        for (int i = 0; i < solution.getCitiesOrder().length; i++) {
-//            for (int j = 0; j < solution.getBreakpoints().length; j++) {
-//                if (i == solution.getBreakpoints()[j]) {
-//                    graphPoints.add(cityToPoint(0));
-//                }
-//            }
-//            graphPoints.add(cityToPoint(solution.getCitiesOrder()[i]));
-//        }
-//        graphPoints.add(cityToPoint(0));
-//
-//        // draw edges
-//        Stroke oldStroke = g2.getStroke();
-//        g2.setColor(GRAPH_COLOR);
-//        g2.setStroke(GRAPH_STROKE);
-//        for (int i = 0; i < graphPoints.size() - 1; i++) {
-//            int x1 = graphPoints.get(i).x;
-//            int y1 = graphPoints.get(i).y;
-//            int x2 = graphPoints.get(i + 1).x;
-//            int y2 = graphPoints.get(i + 1).y;
-//            g2.drawLine(x1, y1, x2, y2);
-//        }
-//
-//        // draw nodes
-//        g2.setStroke(oldStroke);
-//        g2.setColor(GRAPH_POINT_COLOR);
-//        for (Point graphPoint : graphPoints) {
-//            int x = graphPoint.x - GRAPH_POINT_SIZE / 2;
-//            int y = graphPoint.y - GRAPH_POINT_SIZE / 2;
-//            g2.fillOval(x, y, GRAPH_POINT_SIZE, GRAPH_POINT_SIZE);
-//        }
+        List<Point> graphPoints = new ArrayList<>();
+        graphPoints.add(cityToPoint(0));
+        for (int i = 0; i < solution.getCitiesOrder().size(); i++) {
+            graphPoints.add(cityToPoint(solution.getCitiesOrder().get(i)));
+        }
+        graphPoints.add(cityToPoint(0));
+
+        // draw edges
+        Stroke oldStroke = g2.getStroke();
+        g2.setColor(GRAPH_COLOR);
+        g2.setStroke(GRAPH_STROKE);
+        for (int i = 0; i < graphPoints.size() - 1; i++) {
+            int x1 = graphPoints.get(i).x;
+            int y1 = graphPoints.get(i).y;
+            int x2 = graphPoints.get(i + 1).x;
+            int y2 = graphPoints.get(i + 1).y;
+            g2.drawLine(x1, y1, x2, y2);
+        }
+
+        // draw nodes
+        g2.setStroke(oldStroke);
+        g2.setColor(GRAPH_POINT_COLOR);
+        for (Point graphPoint : graphPoints) {
+            int x = graphPoint.x - GRAPH_POINT_SIZE / 2;
+            int y = graphPoint.y - GRAPH_POINT_SIZE / 2;
+            g2.fillOval(x, y, GRAPH_POINT_SIZE, GRAPH_POINT_SIZE);
+        }
     }
 
     @Override

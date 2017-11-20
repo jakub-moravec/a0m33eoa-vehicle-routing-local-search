@@ -9,6 +9,7 @@ import model.Solution;
 import templates.Individual;
 import templates.IndividualWithAssignedFitness;
 import templates.StatisticsPerEpoch;
+import ui.DrawGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         InputReader.read("src/main/resources/data/mTSP_50.data");
-        // TODO draw graph
+        DrawGraph.createAndShowGui(RandomSolutionGenerator.generateSolution());
 
         //types by order: genes, decoded genes - solution, fitness, container with statistics
         EvolutionConfiguration<Solution, Solution, Double, MyStatisticsPerEpoch> evolutionConfiguration = (new EvolutionConfigurationBuilder<Solution, Solution, Double, MyStatisticsPerEpoch>())
@@ -110,8 +111,8 @@ public class Main {
         List<MyStatisticsPerEpoch> statistics = evolutionExecutor.run();
         long time = statistics.stream().mapToLong(StatisticsPerEpoch::getExecution).sum();
         MyStatisticsPerEpoch bestEpoch = statistics.stream().max(Comparator.comparing(stats -> stats.getBestIndividual().getFitness())).get();
-        // TODO draw graph
         logger.info("Executed in " + time + ", best solution in epoch " + bestEpoch.getEpoch());
+        DrawGraph.createAndShowGui(bestEpoch.getBestIndividual().getGenes());
     }
 
     /**
