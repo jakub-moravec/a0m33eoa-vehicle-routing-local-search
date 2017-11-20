@@ -55,4 +55,25 @@ public class Solution {
         clone.setCitiesOrder(new ArrayList<>(this.citiesOrder));
         return clone;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Solution)) return false;
+
+        Solution solution = (Solution) o;
+
+        if (Double.compare(solution.evaluation, evaluation) != 0) return false;
+        return citiesOrder.equals(solution.citiesOrder);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = citiesOrder.hashCode();
+        temp = Double.doubleToLongBits(evaluation);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }

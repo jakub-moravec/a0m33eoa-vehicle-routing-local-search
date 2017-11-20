@@ -42,8 +42,6 @@ public class Main {
                     for (int i = 0; i < firstParent.getGenes().getCitiesOrder().size(); i++) {
                         if (RANDOM.nextBoolean()) {
                             firstSetOfGenes.getCitiesOrder().set(i, secondParent.getGenes().getCitiesOrder().get(i));
-                        }
-                        if (RANDOM.nextBoolean()) {
                             secondSetOfGenes.getCitiesOrder().set(i, firstParent.getGenes().getCitiesOrder().get(i));
                         }
                     }
@@ -53,24 +51,23 @@ public class Main {
                     returnList.add(new Individual<>(secondSetOfGenes));
                     return returnList;
                 })
-                //simple bit-flip mutation
+                // Mutation switches two cities
                 .mutation(individual -> {
-                    Solution genes = individual.getGenes().clone();
-                    for (int i = 0; i < genes.getCitiesOrder().size(); i++) {
-                        // Mutation switches two cities
+                    Solution mutatedSolution = individual.getGenes().clone();
+                    for (int i = 0; i < mutatedSolution.getCitiesOrder().size(); i++) {
                         if (RANDOM.nextDouble() < Configuration.getProbabilityOfMutation()) {
-                            int j = RANDOM.nextInt(genes.getCitiesOrder().size());
-                            int city = genes.getCitiesOrder().get(i);
-                            genes.getCitiesOrder().set(i, genes.getCitiesOrder().get(i));
-                            genes.getCitiesOrder().set(j, city);
+                            int j = RANDOM.nextInt(mutatedSolution.getCitiesOrder().size());
+                            int city = mutatedSolution.getCitiesOrder().get(i);
+                            mutatedSolution.getCitiesOrder().set(i, mutatedSolution.getCitiesOrder().get(j));
+                            mutatedSolution.getCitiesOrder().set(j, city);
                         }
                     }
-                    return Optional.of(new Individual<>(genes));
+                    return Optional.of(new Individual<>(mutatedSolution));
                 })
                 // selection
                 .selector(population -> {
                     /*
-                     * roulette
+                     * roulette - FIXME opravit vzhledem k minimalizaci
                      */
                     double overallFitness = 0;
                     for (IndividualWithAssignedFitness<Solution, Solution, Double> individual : population) {
@@ -95,14 +92,14 @@ public class Main {
                 //strategy to initialize single individual - do it randomly
                 .populationInitialization(() -> new Individual<>(RandomSolutionGenerator.generateSolution()))
                 //strategy how to decode genes
-                .decoding(Main::decode)
+                .decoding((x)->x)
                 //how fitness is computed
                 .fitnessAssessment(EuclideanFitnessEvaluator::calculateFitness)
                 .fitnessIsMaximized(false)
-                .parallel(true)
+                .parallel(false)
                 .probabilityOfCrossover(Configuration.getProbabilityOfCrossover())
                 .populationSize(Configuration.getPopulationSize())
-                //when to terminate evolution, after 100 epochs has been reached
+                //when to terminate evolution
                 .terminationCondition(epochs -> epochs.size() < Configuration.getMaxEpoch())
                 //use own statistics
                 .statisticsCreation(MyStatisticsPerEpoch::new)
@@ -116,15 +113,6 @@ public class Main {
     }
 
     /**
-     * Decodes genotype stored in 'genes'.
-     *
-     * @return an value coded by binary genes
-     */
-    private static Solution decode(Solution solution) {
-        return solution;
-    }
-
-    /**
      * Own implementation of class with statistics, most important is method getSummary(). It is used to store and print results
      */
     private static class MyStatisticsPerEpoch extends StatisticsPerEpoch<Solution, Solution, Double> {
@@ -135,7 +123,7 @@ public class Main {
 
         public String getSummary() {
             return "Epoch " + epoch + ", avg. fitness: " + population.stream().mapToDouble(IndividualWithAssignedFitness::getFitness).average().orElse(0) + ", #fitness evaluations: " + countOfFitnessEvaluations + ", execution time:" + execution + "\n"
-                    + "result: " + decode(bestIndividual.getGenes()) + ", best fitness: " + bestIndividual.getFitness().toString();
+                    + "result: " + bestIndividual.getGenes() + ", best fitness: " + bestIndividual.getFitness().toString();
         }
     }
 
