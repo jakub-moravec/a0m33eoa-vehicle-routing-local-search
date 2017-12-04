@@ -20,7 +20,7 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int maxEpoch = 2000;
+    private static int maxEpoch = 3000;
 
     @Getter
     @Setter

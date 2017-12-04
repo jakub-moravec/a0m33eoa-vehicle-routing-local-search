@@ -85,6 +85,12 @@ public class EvolutionExecutor<V, T, K extends Comparable<K>, L extends Statisti
                                     .filter(Optional::isPresent)
                                     .map(Optional::get);
                         }
+                        if (configuration.getLocalSearch().isPresent()) {
+                            offspring = offspring
+                                    .map(individual -> configuration.getLocalSearch().get().localSearch(individual))
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get);
+                        }
                         return assignFitnessToIndividuals(offspring).map(ind -> new IndividualWithFitnessAssessmentStatus(ind, true));
                     } else {
                         if (configuration.getMutation().isPresent()) {

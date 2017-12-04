@@ -8,6 +8,7 @@ import templates.operations.CrossoverStrategy;
 import templates.operations.DecodingStrategy;
 import templates.operations.FitnessAssessmentStrategy;
 import templates.operations.FitnessTweakingStrategy;
+import templates.operations.LocalSearchStrategy;
 import templates.operations.MutationStrategy;
 import templates.operations.PopulationInitializationStrategy;
 import templates.operations.ReplacementStrategy;
@@ -22,6 +23,7 @@ public class EvolutionConfigurationBuilder<V, T, K extends Comparable<K>, L exte
     private PopulationInitializationStrategy<V, T> populationInitialization = null;
     private Optional<CrossoverStrategy<V, T>> crossover = Optional.empty();
     private Optional<MutationStrategy<V, T>> mutation = Optional.empty();
+    private Optional<LocalSearchStrategy<V, T>> localSearch = Optional.empty();
     //replace whole population
     private ReplacementStrategy<V, T, K> replacement = null;
     private SelectorStrategy<V, T, K> selector = null;
@@ -55,6 +57,11 @@ public class EvolutionConfigurationBuilder<V, T, K extends Comparable<K>, L exte
 
     public EvolutionConfigurationBuilder<V, T, K, L> mutation(MutationStrategy<V, T> mutation) {
         this.mutation = Optional.ofNullable(mutation);
+        return copy();
+    }
+
+    public EvolutionConfigurationBuilder<V, T, K, L> localSearch(LocalSearchStrategy<V, T> localSearch) {
+        this.localSearch = Optional.ofNullable(localSearch);
         return copy();
     }
 
@@ -105,13 +112,13 @@ public class EvolutionConfigurationBuilder<V, T, K extends Comparable<K>, L exte
 
     private EvolutionConfigurationBuilder<V, T, K, L> copy() {
         return new EvolutionConfigurationBuilder<>(fitnessTweakingStrategy, fitnessAssessment, populationInitialization,
-                crossover, mutation, replacement, selector, isParallel, isFitnessIsMaximized, statisticsCreation, populationSize,
+                crossover, mutation, localSearch, replacement, selector, isParallel, isFitnessIsMaximized, statisticsCreation, populationSize,
                 probabilityOfCrossover, terminationCondition, decoding);
     }
 
     private EvolutionConfigurationBuilder(Optional<FitnessTweakingStrategy<V, T, K>> fitnessTweakingStrategy, FitnessAssessmentStrategy<T, K> fitnessAssessment,
                                           PopulationInitializationStrategy<V, T> populationInitialization, Optional<CrossoverStrategy<V, T>> crossover,
-                                          Optional<MutationStrategy<V, T>> mutation, ReplacementStrategy<V, T, K> replacement,
+                                          Optional<MutationStrategy<V, T>> mutation, Optional<LocalSearchStrategy<V, T>> localSearch, ReplacementStrategy<V, T, K> replacement,
                                           SelectorStrategy<V, T, K> selector, boolean isParallel, boolean isFitnessIsMaximized,
                                           StatisticsCreationStrategy<V, T, K, L> statisticsCreation, int populationSize, double probabilityOfCrossover,
                                           TerminationCondition<V, T, K, L> terminationCondition,
@@ -121,6 +128,7 @@ public class EvolutionConfigurationBuilder<V, T, K extends Comparable<K>, L exte
         this.populationInitialization = populationInitialization;
         this.crossover = crossover;
         this.mutation = mutation;
+        this.localSearch = localSearch;
         this.replacement = replacement;
         this.selector = selector;
         this.isParallel = isParallel;
@@ -134,7 +142,7 @@ public class EvolutionConfigurationBuilder<V, T, K extends Comparable<K>, L exte
 
     public EvolutionConfiguration<V, T, K, L> build() {
         return new EvolutionConfiguration<>(fitnessTweakingStrategy, fitnessAssessment, populationInitialization,
-                crossover, mutation, replacement, selector, isParallel, isFitnessIsMaximized, statisticsCreation, populationSize,
+                crossover, mutation, localSearch, replacement, selector, isParallel, isFitnessIsMaximized, statisticsCreation, populationSize,
                 probabilityOfCrossover, terminationCondition, decoding);
     }
 

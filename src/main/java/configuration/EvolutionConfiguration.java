@@ -8,6 +8,7 @@ import templates.operations.CrossoverStrategy;
 import templates.operations.DecodingStrategy;
 import templates.operations.FitnessAssessmentStrategy;
 import templates.operations.FitnessTweakingStrategy;
+import templates.operations.LocalSearchStrategy;
 import templates.operations.MutationStrategy;
 import templates.operations.PopulationInitializationStrategy;
 import templates.operations.ReplacementStrategy;
@@ -22,6 +23,7 @@ public class EvolutionConfiguration<V, T, K extends Comparable<K>, L extends Sta
     private final PopulationInitializationStrategy<V, T> populationInitialization;
     private final Optional<CrossoverStrategy<V, T>> crossover;
     private final Optional<MutationStrategy<V, T>> mutation;
+    private final Optional<LocalSearchStrategy<V, T>> localSearch;
     private final ReplacementStrategy<V, T, K> replacement;
     private final SelectorStrategy<V, T, K> selector;
     private final boolean isParallel;
@@ -33,18 +35,19 @@ public class EvolutionConfiguration<V, T, K extends Comparable<K>, L extends Sta
     private final DecodingStrategy<V, T> decoding;
 
     EvolutionConfiguration(Optional<FitnessTweakingStrategy<V, T, K>> fitnessTweakingStrategy,
-                                   FitnessAssessmentStrategy<T, K> fitnessAssessment,
-                                   PopulationInitializationStrategy<V, T> populationInitialization, Optional<CrossoverStrategy<V, T>> crossover,
-                                   Optional<MutationStrategy<V, T>> mutation, ReplacementStrategy<V, T, K> replacement,
-                                   SelectorStrategy<V, T, K> selector, boolean isParallel, boolean isFitnessIsMaximized,
-                                   StatisticsCreationStrategy<V, T, K, L> statisticsCreation, int populationSize,
-                                   double probabilityOfCrossover,
-                                   TerminationCondition<V, T, K, L> terminationCondition, DecodingStrategy<V, T> decoding) {
+                           FitnessAssessmentStrategy<T, K> fitnessAssessment,
+                           PopulationInitializationStrategy<V, T> populationInitialization, Optional<CrossoverStrategy<V, T>> crossover,
+                           Optional<MutationStrategy<V, T>> mutation, Optional<LocalSearchStrategy<V, T>> localSearch, ReplacementStrategy<V, T, K> replacement,
+                           SelectorStrategy<V, T, K> selector, boolean isParallel, boolean isFitnessIsMaximized,
+                           StatisticsCreationStrategy<V, T, K, L> statisticsCreation, int populationSize,
+                           double probabilityOfCrossover,
+                           TerminationCondition<V, T, K, L> terminationCondition, DecodingStrategy<V, T> decoding) {
         this.fitnessTweakingStrategy = fitnessTweakingStrategy;
         this.fitnessAssessment = fitnessAssessment;
         this.populationInitialization = populationInitialization;
         this.crossover = crossover;
         this.mutation = mutation;
+        this.localSearch = localSearch;
         this.replacement = replacement;
         this.selector = selector;
         this.isParallel = isParallel;
