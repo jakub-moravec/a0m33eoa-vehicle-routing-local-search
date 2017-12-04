@@ -124,7 +124,7 @@ public class Main {
                 //how fitness is computed
                 .fitnessAssessment(EuclideanFitnessEvaluator::calculateFitness)
                 .fitnessIsMaximized(false)
-                .parallel(true)
+                .parallel(false)
                 .probabilityOfCrossover(Configuration.getProbabilityOfCrossover())
                 .populationSize(Configuration.getPopulationSize())
                 //when to terminate evolution

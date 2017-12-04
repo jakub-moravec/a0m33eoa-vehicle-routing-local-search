@@ -22,9 +22,10 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
         int endExclusive = -1;
 
         List<Integer> path = individual.getGenes().getCitiesOrder();
+        path.add(0);
 
         for (int i = 0; i < path.size(); i++) {
-            if(path.get(i) == 0) {
+            if(path.get(i) == 0 || i == path.size() -1) {
                 startInclusive = endExclusive + 1;
                 endExclusive = i;
 
@@ -39,7 +40,9 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
             }
         }
 
-        return null;
+        path.remove(path.size() -1);
+
+        return Optional.of(new Individual<>(new Solution(path)));
     }
 
     /**
@@ -48,7 +51,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
      * @param path path taken by one traveler
      * @return optimized path
      */
-    private List<Integer> performTwoOptOnPath(List<Integer> path) {
+    public List<Integer> performTwoOptOnPath(List<Integer> path) {
         List<Integer> clonePath = new ArrayList<>();
         clonePath.addAll(path);
 
@@ -60,7 +63,10 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
         for (int i = 0; i < clonePath.size() - 2; i++) {
             for (int j = i + 1; j < clonePath.size() - 1; j++) {
                 if (linesCrosses(clonePath, i, i + 1, j, j + 1)) {
+                    System.out.println("Swapping");
+                    System.out.println(clonePath);
                     clonePath = swapLines(clonePath,  i, i + 1, j, j + 1);
+                    System.out.println(clonePath);
                 }
             }
         }
@@ -82,16 +88,18 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
      * @param toB second line end city
      * @return new path
      */
-    private List<Integer> swapLines(List<Integer> clonePath, int fromA, int toA, int fromB, int toB) {
+    public List<Integer> swapLines(List<Integer> clonePath, int fromA, int toA, int fromB, int toB) {
         List<Integer> swapped = new ArrayList<>();
 
-        swapped.addAll(clonePath.subList(0, fromA));
+        swapped.addAll(clonePath.subList(0, fromA + 1));
 
         List<Integer> middlePart = clonePath.subList(toA, fromB + 1);
         Collections.reverse(middlePart);
         swapped.addAll(middlePart);
 
         swapped.addAll(clonePath.subList(fromB + 1, toB + 1));
+
+        swapped.addAll(clonePath.subList(toB + 1, clonePath.size()));
 
         return swapped;
     }
@@ -107,7 +115,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
      * @param toB second line end city
      * @return flag, whether lines are crossed
      */
-    private boolean linesCrosses(List<Integer> clonePath,  int fromA, int toA, int fromB, int toB) {
+    public boolean linesCrosses(List<Integer> clonePath,  int fromA, int toA, int fromB, int toB) {
         Integer[] cityFromA = ModelHolder.getModel().get(clonePath.get(fromA));
         Integer[] cityToA = ModelHolder.getModel().get(clonePath.get(toA));
         Integer[] cityFromB = ModelHolder.getModel().get(clonePath.get(fromB));
@@ -118,9 +126,15 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
         int s2_x = cityToB[0] - cityFromB[0]; //p3_x - p2_x;
         int s2_y = cityToB[1] - cityFromB[1]; //p3_y - p2_y;
 
+        double divisor = -s2_x * s1_y + s1_x * s2_y;
+
+        if (divisor == 0) {
+           return false;
+        }
+
         double s, t;
-        s = (-s1_y * (cityFromA[0] - cityFromB[0]) + s1_x * (cityFromA[1] - cityFromB[1])) / (-s2_x * s1_y + s1_x * s2_y);
-        t = ( s2_x * (cityFromA[1] - cityFromB[1]) - s2_y * (cityFromA[0] - cityFromB[0])) / (-s2_x * s1_y + s1_x * s2_y);
+        s = (-s1_y * (cityFromA[0] - cityFromB[0]) + s1_x * (cityFromA[1] - cityFromB[1])) / (divisor);
+        t = ( s2_x * (cityFromA[1] - cityFromB[1]) - s2_y * (cityFromA[0] - cityFromB[0])) / (divisor);
 
         return s >= 0 && s <= 1 && t >= 0 && t <= 1;
     }
