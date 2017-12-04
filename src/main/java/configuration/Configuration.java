@@ -22,11 +22,11 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int maxEpoch = 3000;
+    private static int maxEpoch = 5000;
 
     @Getter
     @Setter
-    private static int populationSize = 200;
+    private static int populationSize = 1000;
 
     @Getter
     @Setter
@@ -34,15 +34,19 @@ public class Configuration {
 
     @Getter
     @Setter
+    private static double probabilityOfLocalSearch = 0.1;
+
+    @Getter
+    @Setter
     private static double probabilityOfCrossover = 0.5;
 
     @Getter
     @Setter
-    private static int tournamentCandidates = 20;
+    private static int tournamentCandidates = 10;
 
     @Getter
     @Setter
-    private static int individualsToKeep = 20;
+    private static int individualsToKeep = 100;
 
     //strategies
     @Getter

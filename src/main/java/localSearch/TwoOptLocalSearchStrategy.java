@@ -1,5 +1,6 @@
 package localSearch;
 
+import configuration.Configuration;
 import model.ModelHolder;
 import model.Solution;
 import templates.Individual;
@@ -9,12 +10,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * Two-opt local search strategy.
  * @author moravja8
  */
 public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, Solution> {
+
+    private static final Random RANDOM = new Random();
 
     @Override
     public Optional<Individual<Solution, Solution>> localSearch(Individual<Solution, Solution> individual) {
@@ -29,14 +33,15 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
                 startInclusive = endExclusive + 1;
                 endExclusive = i;
 
-                List<Integer> optimizedPath = performTwoOptOnPath(path.subList(startInclusive, endExclusive));
+                if (RANDOM.nextDouble() < Configuration.getProbabilityOfLocalSearch()) {
+                    List<Integer> optimizedPath = performTwoOptOnPath(path.subList(startInclusive, endExclusive));
 
-                int k = 0;
-                for (int j = startInclusive; j < endExclusive; j++) {
-                    path.set(j, optimizedPath.get(k));
-                    k ++;
+                    int k = 0;
+                    for (int j = startInclusive; j < endExclusive; j++) {
+                        path.set(j, optimizedPath.get(k));
+                        k++;
+                    }
                 }
-
             }
         }
 
@@ -63,10 +68,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
         for (int i = 0; i < clonePath.size() - 2; i++) {
             for (int j = i + 1; j < clonePath.size() - 1; j++) {
                 if (linesCrosses(clonePath, i, i + 1, j, j + 1)) {
-                    System.out.println("Swapping");
-                    System.out.println(clonePath);
                     clonePath = swapLines(clonePath,  i, i + 1, j, j + 1);
-                    System.out.println(clonePath);
                 }
             }
         }
