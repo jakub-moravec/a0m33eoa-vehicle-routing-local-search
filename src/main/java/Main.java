@@ -106,14 +106,10 @@ public class Main {
                     return Optional.of(new Individual<>(mutatedSolution));
                 })
                 // Local search all new solutioons
-                .localSearch(individual -> {
-                    Solution improvedSolution = individual.getGenes().clone();
-
-                    return Optional.of(new Individual<>(improvedSolution));
-                })
+                .localSearch(individual -> Configuration.getLocalSearchStrategy().localSearch(individual))
                 // tournament selection
                 .selector(population -> Configuration.getSelectorStrategy().select(population))
-                //generational replacement strategy. keep nothing from previous population
+                // keep n best parents
                 .replacement(currentPopulation -> {
                     List<IndividualWithAssignedFitness<Solution, Solution, Double>> newPopulation = new ArrayList<>();
                     for (int i = 0; i < Configuration.getIndividualsToKeep(); i++) {

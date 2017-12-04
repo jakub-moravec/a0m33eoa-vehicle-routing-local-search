@@ -1,7 +1,5 @@
 package model;
 
-import com.sun.istack.internal.Nullable;
-
 import java.util.List;
 
 /**
@@ -14,7 +12,6 @@ public class ModelHolder {
     // cities
     private static List<Integer[]> model;
 
-    @Nullable
     public static List<Integer[]> getModel() {
         return model;
     }

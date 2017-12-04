@@ -1,9 +1,11 @@
 package configuration;
 
+import localSearch.TwoOptLocalSearchStrategy;
 import lombok.Getter;
 import lombok.Setter;
 import model.Solution;
 import selection.TournamentSelectionStrategy;
+import templates.operations.LocalSearchStrategy;
 import templates.operations.SelectorStrategy;
 
 /**
@@ -46,4 +48,8 @@ public class Configuration {
     @Getter
     @Setter
     private static SelectorStrategy<Solution, Solution, Double> selectorStrategy = new TournamentSelectionStrategy();
+
+    @Getter
+    @Setter
+    private static LocalSearchStrategy<Solution, Solution> localSearchStrategy = new TwoOptLocalSearchStrategy();
 }
