@@ -4,8 +4,10 @@ import localSearch.TwoOptLocalSearchStrategy;
 import lombok.Getter;
 import lombok.Setter;
 import model.Solution;
+import mutation.SubpathExchangeMutationStrategy;
 import selection.TournamentSelectionStrategy;
 import templates.operations.LocalSearchStrategy;
+import templates.operations.MutationStrategy;
 import templates.operations.SelectorStrategy;
 
 /**
@@ -22,11 +24,11 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int maxEpoch = 5000;
+    private static int maxEpoch = 3000;
 
     @Getter
     @Setter
-    private static int populationSize = 1000;
+    private static int populationSize = 500;
 
     @Getter
     @Setter
@@ -35,6 +37,10 @@ public class Configuration {
     @Getter
     @Setter
     private static double probabilityOfLocalSearch = 0.1;
+
+    @Getter
+    @Setter
+    private static double probabilityOfLocalSearchSwap = 0.001;
 
     @Getter
     @Setter
@@ -56,4 +62,8 @@ public class Configuration {
     @Getter
     @Setter
     private static LocalSearchStrategy<Solution, Solution> localSearchStrategy = new TwoOptLocalSearchStrategy();
+
+    @Getter
+    @Setter
+    private static MutationStrategy<Solution, Solution> mutationStrategy = new SubpathExchangeMutationStrategy();
 }

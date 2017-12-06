@@ -67,7 +67,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
         // perform 2-opt
         for (int i = 0; i < clonePath.size() - 2; i++) {
             for (int j = i + 1; j < clonePath.size() - 1; j++) {
-                if (linesCrosses(clonePath, i, i + 1, j, j + 1)) {
+                if (linesCrosses(clonePath, i, i + 1, j, j + 1) || RANDOM.nextDouble() < Configuration.getProbabilityOfLocalSearchSwap()) {
                     clonePath = swapLines(clonePath,  i, i + 1, j, j + 1);
                 }
             }

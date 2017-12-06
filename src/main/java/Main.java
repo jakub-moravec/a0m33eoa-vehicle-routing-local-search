@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -93,18 +92,7 @@ public class Main {
                     return Arrays.asList(new Individual<>(new Solution(child1)), new Individual<>(new Solution(child2)));
                 })
                 // Mutation switches two cities
-                .mutation(individual -> {
-                    Solution mutatedSolution = individual.getGenes().clone();
-                    for (int i = 0; i < mutatedSolution.getCitiesOrder().size(); i++) {
-                        if (RANDOM.nextDouble() < Configuration.getProbabilityOfMutation()) {
-                            int j = RANDOM.nextInt(mutatedSolution.getCitiesOrder().size());
-                            int city = mutatedSolution.getCitiesOrder().get(i);
-                            mutatedSolution.getCitiesOrder().set(i, mutatedSolution.getCitiesOrder().get(j));
-                            mutatedSolution.getCitiesOrder().set(j, city);
-                        }
-                    }
-                    return Optional.of(new Individual<>(mutatedSolution));
-                })
+                .mutation(individual -> Configuration.getMutationStrategy().mutation(individual))
                 // Local search all new solutioons
                 .localSearch(individual -> Configuration.getLocalSearchStrategy().localSearch(individual))
                 // tournament selection
@@ -124,7 +112,7 @@ public class Main {
                 //how fitness is computed
                 .fitnessAssessment(EuclideanFitnessEvaluator::calculateFitness)
                 .fitnessIsMaximized(false)
-                .parallel(true)
+                .parallel(false)
                 .probabilityOfCrossover(Configuration.getProbabilityOfCrossover())
                 .populationSize(Configuration.getPopulationSize())
                 //when to terminate evolution
