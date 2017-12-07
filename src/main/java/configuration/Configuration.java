@@ -38,15 +38,15 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static double probabilityOfMutation = 0.01;
+    private static double probabilityOfMutation = 0.005;
 
     @Getter
     @Setter
-    private static double probabilityOfLocalSearch = 0.1;
+    private static double probabilityOfLocalSearch = 0.25;
 
     @Getter
     @Setter
-    private static double probabilityOfLocalSearchSwap = 0.001;
+    private static double probabilityOfLocalSearchSwap = 0.005;
 
     @Getter
     @Setter
@@ -59,6 +59,14 @@ public class Configuration {
     @Getter
     @Setter
     private static int individualsToKeep = 100;
+
+    @Getter
+    @Setter
+    private static double currentBestFitness = Double.MAX_VALUE;
+
+    @Getter
+    @Setter
+    private static int bestFitnessUnchangedEpochs = 0;
 
     //strategies
     @Getter

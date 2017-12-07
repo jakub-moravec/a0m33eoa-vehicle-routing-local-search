@@ -137,6 +137,12 @@ public class Main {
         }
 
         public String getSummary() {
+            if (bestIndividual.getFitness() < Configuration.getCurrentBestFitness()) {
+                Configuration.setCurrentBestFitness(bestIndividual.getFitness());
+                Configuration.setBestFitnessUnchangedEpochs(0);
+            } else {
+                Configuration.setBestFitnessUnchangedEpochs(Configuration.getBestFitnessUnchangedEpochs() + 1);
+            }
             return "Epoch " + epoch + ", avg. fitness: " + population.stream().mapToDouble(IndividualWithAssignedFitness::getFitness).average().orElse(0) + ", #fitness evaluations: " + countOfFitnessEvaluations + ", execution time:" + execution + "\n"
                     + "result: " + bestIndividual.getGenes() + ", best fitness: " + bestIndividual.getFitness().toString();
         }
