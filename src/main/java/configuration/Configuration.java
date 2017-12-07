@@ -1,6 +1,8 @@
 package configuration;
 
-import localSearch.TwoOptLocalSearchStrategy;
+import localSearch.LocalSearchStrategyPicker;
+import localSearch.TwoOptAllTravelersLocalSearchStrategy;
+import localSearch.TwoOptOneTravelerLocalSearchStrategy;
 import lombok.Getter;
 import lombok.Setter;
 import model.Solution;
@@ -9,6 +11,10 @@ import selection.TournamentSelectionStrategy;
 import templates.operations.LocalSearchStrategy;
 import templates.operations.MutationStrategy;
 import templates.operations.SelectorStrategy;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Algorithm configuration.
@@ -24,7 +30,7 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static int maxEpoch = 3000;
+    private static int maxEpoch = 5000;
 
     @Getter
     @Setter
@@ -61,7 +67,12 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static LocalSearchStrategy<Solution, Solution> localSearchStrategy = new TwoOptLocalSearchStrategy();
+    private static LocalSearchStrategy<Solution, Solution> localSearchStrategy = new LocalSearchStrategyPicker();
+
+    @Getter
+    @Setter
+    private static List<LocalSearchStrategy<Solution, Solution>> localSearchStrategies =
+            new ArrayList<>(Arrays.asList(new TwoOptOneTravelerLocalSearchStrategy(), new TwoOptAllTravelersLocalSearchStrategy()));
 
     @Getter
     @Setter

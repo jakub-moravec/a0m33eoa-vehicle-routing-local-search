@@ -2,53 +2,21 @@ package localSearch;
 
 import configuration.Configuration;
 import model.ModelHolder;
-import model.Solution;
-import templates.Individual;
-import templates.operations.LocalSearchStrategy;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 /**
- * Two-opt local search strategy.
+ * Utility method for 2-opt local search algorithm.
+ *
  * @author moravja8
  */
-public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, Solution> {
+public class TwoOptUtils {
 
     private static final Random RANDOM = new Random();
 
-    @Override
-    public Optional<Individual<Solution, Solution>> localSearch(Individual<Solution, Solution> individual) {
-        int startInclusive = 0;
-        int endExclusive = -1;
-
-        List<Integer> path = individual.getGenes().getCitiesOrder();
-        path.add(0);
-
-        for (int i = 0; i < path.size(); i++) {
-            if(path.get(i) == 0 || i == path.size() -1) {
-                startInclusive = endExclusive + 1;
-                endExclusive = i;
-
-                if (RANDOM.nextDouble() < Configuration.getProbabilityOfLocalSearch()) {
-                    List<Integer> optimizedPath = performTwoOptOnPath(path.subList(startInclusive, endExclusive));
-
-                    int k = 0;
-                    for (int j = startInclusive; j < endExclusive; j++) {
-                        path.set(j, optimizedPath.get(k));
-                        k++;
-                    }
-                }
-            }
-        }
-
-        path.remove(path.size() -1);
-
-        return Optional.of(new Individual<>(new Solution(path)));
-    }
 
     /**
      * Takes a simple TSP path a performs 2-opt on it. Pivots of original mTSP should not be included.
@@ -56,7 +24,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
      * @param path path taken by one traveler
      * @return optimized path
      */
-    public List<Integer> performTwoOptOnPath(List<Integer> path) {
+    public static List<Integer> performTwoOptOnPath(List<Integer> path) {
         List<Integer> clonePath = new ArrayList<>();
         clonePath.addAll(path);
 
@@ -90,7 +58,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
      * @param toB second line end city
      * @return new path
      */
-    public List<Integer> swapLines(List<Integer> clonePath, int fromA, int toA, int fromB, int toB) {
+    public static List<Integer> swapLines(List<Integer> clonePath, int fromA, int toA, int fromB, int toB) {
         List<Integer> swapped = new ArrayList<>();
 
         swapped.addAll(clonePath.subList(0, fromA + 1));
@@ -117,7 +85,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
      * @param toB second line end city
      * @return flag, whether lines are crossed
      */
-    public boolean linesCrosses(List<Integer> clonePath,  int fromA, int toA, int fromB, int toB) {
+    public static boolean linesCrosses(List<Integer> clonePath,  int fromA, int toA, int fromB, int toB) {
         Integer[] cityFromA = ModelHolder.getModel().get(clonePath.get(fromA));
         Integer[] cityToA = ModelHolder.getModel().get(clonePath.get(toA));
         Integer[] cityFromB = ModelHolder.getModel().get(clonePath.get(fromB));
@@ -131,7 +99,7 @@ public class TwoOptLocalSearchStrategy implements LocalSearchStrategy<Solution, 
         double divisor = -s2_x * s1_y + s1_x * s2_y;
 
         if (divisor == 0) {
-           return false;
+            return false;
         }
 
         double s, t;

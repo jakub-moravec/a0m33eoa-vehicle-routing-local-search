@@ -1,6 +1,7 @@
 package localsearch;
 
-import localSearch.TwoOptLocalSearchStrategy;
+import localSearch.TwoOptOneTravelerLocalSearchStrategy;
+import localSearch.TwoOptUtils;
 import model.ModelHolder;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,8 +14,8 @@ import java.util.List;
 /**
  * Created by jmoravec on 04.12.2017.
  */
-public class TwoOptLocalSearchStrategyTest {
-    private final TwoOptLocalSearchStrategy strategy = new TwoOptLocalSearchStrategy();
+public class TwoOptOneTravelerLocalSearchStrategyTest {
+    private final TwoOptOneTravelerLocalSearchStrategy strategy = new TwoOptOneTravelerLocalSearchStrategy();
 
     @Before
     public void setUp() throws Exception {
@@ -45,10 +46,10 @@ public class TwoOptLocalSearchStrategyTest {
     @Test
     public void linesCrosses() throws Exception {
         List<Integer> path = Arrays.asList(0, 2, 1, 3, 0);
-        Assert.assertTrue(strategy.linesCrosses(path, 0, 1, 2, 3));
+        Assert.assertTrue(TwoOptUtils.linesCrosses(path, 0, 1, 2, 3));
 
         List<Integer> path2 = Arrays.asList(0, 1, 2, 3, 0);
-        Assert.assertFalse(strategy.linesCrosses(path2, 0, 1, 2, 3));
+        Assert.assertFalse(TwoOptUtils.linesCrosses(path2, 0, 1, 2, 3));
     }
 
 }
