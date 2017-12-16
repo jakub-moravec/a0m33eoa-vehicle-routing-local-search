@@ -11,7 +11,7 @@ import java.io.IOException;
 public class ResultTracker {
 
     @Getter
-    private static double[][] results = new double[(int) Math.ceil(Configuration.getMaxEpoch() / Configuration.getEpochSampleModulo())][Configuration.getNumberOfTries() * 2];
+    private static double[][] results = new double[(int) Math.ceil(Configuration.getMaxEpoch() + 1000 / Configuration.getEpochSampleModulo())][Configuration.getNumberOfTries() * 2];
 
     public static void addResult (int epocha, double bestResult) {
             results[epocha / Configuration.getEpochSampleModulo()][Configuration.getCurrentTry()] = Configuration.getFitnessEvaluated();

@@ -31,7 +31,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException {
-        InputReader.read("src/main/resources/data/mTSP_100.data");
+        InputReader.read("src/main/resources/data/mTSP_50.data");
 
         for (int tryI = 0; tryI < Configuration.getNumberOfTries(); tryI++) {
 
@@ -132,7 +132,7 @@ public class Main {
                     .probabilityOfCrossover(Configuration.getProbabilityOfCrossover())
                     .populationSize(Configuration.getPopulationSize())
                     //when to terminate evolution
-                    .terminationCondition(epochs -> epochs.size() < Configuration.getMaxEpoch())
+                    .terminationCondition(epochs -> Configuration.getFitnessEvaluated() < Configuration.getMaxFitnessEvaluated())
                     //use own statistics
                     .statisticsCreation(MyStatisticsPerEpoch::new)
                     .build();
@@ -162,7 +162,7 @@ public class Main {
             }
 
             return "Epoch " + epoch + ", avg. fitness: " + population.stream().mapToDouble(IndividualWithAssignedFitness::getFitness).average().orElse(0) + ", #fitness evaluations: " + countOfFitnessEvaluations + ", execution time:" + execution + "\n"
-                    + "result: " + bestIndividual.getGenes() + ", best fitness: " + bestIndividual.getFitness().toString();
+                    + "result: " + bestIndividual.getGenes() + ", best fitness: " + bestIndividual.getFitness().toString() + ", try: " + Configuration.getCurrentTry();
         }
     }
 
