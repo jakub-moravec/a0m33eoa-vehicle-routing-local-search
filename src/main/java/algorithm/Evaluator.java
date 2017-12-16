@@ -18,6 +18,8 @@ public class Evaluator {
      * @return evaluation
      */
     public static double evaluate(Solution solution) {
+        Configuration.FITNESS_EVALUATED++;
+
         double longestPath = -1;
 
         solution.setWeights(new double[solution.getCitiesOrder().length]);

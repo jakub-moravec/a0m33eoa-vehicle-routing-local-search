@@ -7,6 +7,8 @@ public class Configuration {
 
     private static int NUMBER_OF_TRAVELERS = 3;
 
+    public static int FITNESS_EVALUATED = 0;
+
     public static int getNumberOfTravelers() {
         return NUMBER_OF_TRAVELERS;
     }

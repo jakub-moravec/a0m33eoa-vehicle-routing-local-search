@@ -1,5 +1,6 @@
 import algorithm.BestNeighborAlgorithm;
 import algorithm.Evaluator;
+import config.Configuration;
 import input.InputReader;
 import model.ModelHolder;
 import model.Solution;
@@ -32,9 +33,11 @@ public class Main {
                 printSolution(generation+1, solution);
             }
             generation++;
-        } while (generation < 1000000);
+        } while (generation < 5000);
 
         DrawGraph.createAndShowGui(solution);
+
+        System.out.println(Configuration.FITNESS_EVALUATED);
     }
 
     /**
