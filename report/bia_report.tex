@@ -25,23 +25,48 @@ shrnuje dosažené výsledky.
 Úkolem je vyřešit úlohu TSP s několika cestujícími pomocí evolučního algoritmu. Na vstupu je úplný neorientovaný graf o \textit{N} uzlech. Cílem je nalézt takovou množinu cest pro \textit{M} cestujících, které všechny vychází z počátečního uzlu (depotu) a zase v něm končí, všechny uzly (kromě depotu) jsou navštíveny právě jednou a délka nejdelší cesty je minimální. Žádná z cest nesmí mít nulovou délku.
 
 \section{Úvod}
-Úloha TSP s několika cestujícími známá také jako \textbf{VRP} (\textit{Vehicle routing problem}) je kombinatorická optimalizační úloha odpovídající otázku "Jaké je optimální uspořádání hran pro několik cestujicích tak, aby byly výsledné cesty pokrývající všechny uzly nejkratší?". Určení optimálního řešení tohoto problému je \textit{NP-těžká} úloha, proto bývá částo řešena pomocí heuristik a aproximačních algoritmů. V tomto dokumentu budou představena řešení pomocí \textit{lokálního vyhledávání}, \textit{evolučního algoritmu} a \textit{memetického algoritmu} (kombinace předcházejících). 
+Úloha TSP s několika cestujícími známá také jako \textbf{VRP} (\textit{Vehicle routing problem}) je kombinatorická optimalizační úloha odpovídající otázku "Jaké je optimální uspořádání hran pro několik cestujicích tak, aby byly výsledné cesty pokrývající všechny uzly nejkratší?". Určení optimálního řešení tohoto problému je \textit{NP-těžká} úloha, proto bývá částo řešena pomocí heuristik a aproximačních algoritmů. V tomto dokumentu budou představena řešení pomocí \textit{lokálního prohledávání}, \textit{evolučního algoritmu} a \textit{memetického algoritmu} (kombinace předcházejících). 
 
 % fitness fce
-\textit{Fiteness funkce} pro vyhodnocování optimality řešení byla převzata ze zadání úlohy: kvalita řešení je určena jako délka nejdelší cesty z M cest.
+\textit{Fiteness funkce} pro vyhodnocování optimality řešení byla převzata ze zadání úlohy: kvalita řešení je určena jako délka nejdelší cesty z M cest. Tuto fitness funkci se budeme snažit minimalizovat.
 
 % reprezentace
 Jako reprezentace řešení problému byla zvolena uspořádaná množnina identifikátorů měst, kde pořadí měst určuje pořadí jejich průchodu. Depot (id 0) je v množině obsažen \textit{M +1} krát, všechna ostatní města právě jednou. Tato reprezentace byla zvolena proto, aby bylo možné stejným způsobem použitými algoritmy měnit pořadí měst v cestách jednotlivých cestovatelů i přesouvat města mezi cestovateli.  
 
-%%%%
-% TODO really? 
-%\section{Cíl práce}
-%Naučte se formulovat cíl práce, zde podrobně rozeberte zadání, v závěru pak zhodnotíte, zdali
-%bylo cíle dosaženo.
+\section{Cíl práce}
+Cílem práce je implementovat \textit{algoritmus lokálního prohledávání}, \textit{evolučníh algoritmus} a \textit{memetický algoritmus} generující řešení problému taková, aby jejich hodnota fitness funkce byla minimální a to při co možná nejmenším počtu vyhodnocení definované fitness funkce. 
 
+%TODO
 \section{Experimenty}
-Tato část popisuje, jak byly experimenty provedeny, nebojte se použít obrázků a tabulek, které
-zvýší vypovídací schopnost textu a přehlednost.
+V této sekci budou představeny všechny implementované algoritmy a jejich výsledky. 
+
+%TODO basic pseudocode
+
+%TODO společné prvky
+% turnajová selekce
+% 
+
+\subsection{Algoritmus lokálního prohledávání}
+% mutace?
+% crossover? 
+
+\subsection{Evoluční algoritmus}
+% selection crossover 
+% simple mutace
+
+\subsection{Memetický algoritmus}
+% upravená mutace
+% selection crossover
+% dva local search - picking podle úspěšnosti
+% local searche provádějí analýzu na základě modelu, nenavyšují počet vyhodnocení fitness
+
+% TODO tabulka s parametry - společné versus speciální pro jednotlivé přístupy
+
+% TODO grafy fitness dle počtu ohodnocení / epoch 
+
+% TODO souhrnná tabulka
+
+% TODO obrázky nejhezčích řešení
 
 \begin{figure}[ht]
   \centering
