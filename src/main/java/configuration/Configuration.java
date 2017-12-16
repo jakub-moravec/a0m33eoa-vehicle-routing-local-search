@@ -13,34 +13,59 @@ import templates.operations.SelectorStrategy;
  */
 public class Configuration {
 
+    // vars
+    @Getter
+    @Setter
+    private static int fitnessEvaluated = 0;
+
+    @Getter
+    @Setter
+    private static int currentTry = 0;
+
     // parameters
+    @Getter
+    @Setter
+    private static String outputFile = "C:\\Users\\jmoravec\\Desktop\\results\\ea_100.txt";
+
+    @Getter
+    @Setter
+    private static int maxFitnessEvaluated = 2000000;
+
+    @Getter
+    @Setter
+    private static int epochSampleModulo = 20;
+
+    @Getter
+    @Setter
+    private static int numberOfTries = 20;
+
     @Getter
     @Setter
     private static int numberOfTravelers = 3;
 
     @Getter
     @Setter
-    private static int maxEpoch = 2000;
+    private static int maxEpoch = 5000;
 
     @Getter
     @Setter
-    private static int populationSize = 200;
+    private static int populationSize = 500;
 
     @Getter
     @Setter
-    private static double probabilityOfMutation = 0.01;
+    private static double probabilityOfMutation = 0.005;
 
     @Getter
     @Setter
-    private static double probabilityOfCrossover = 0.5;
+    private static double probabilityOfCrossover = 0.6;
 
     @Getter
     @Setter
-    private static int tournamentCandidates = 20;
+    private static int tournamentCandidates = 10;
 
     @Getter
     @Setter
-    private static int individualsToKeep = 20;
+    private static int individualsToKeep = 100;
 
     //strategies
     @Getter
