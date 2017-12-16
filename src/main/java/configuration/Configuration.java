@@ -43,7 +43,7 @@ public class Configuration {
     // parameters
     @Getter
     @Setter
-    private static String outputFile = "output.txt";
+    private static String outputFile = "C:\\Users\\jmoravec\\Desktop\\results\\output.txt";
 
     @Getter
     @Setter
