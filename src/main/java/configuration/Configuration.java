@@ -25,7 +25,7 @@ public class Configuration {
     // parameters
     @Getter
     @Setter
-    private static String outputFile = "C:\\Users\\jmoravec\\Desktop\\results\\ea_50.txt";
+    private static String outputFile = "C:\\Users\\jmoravec\\Desktop\\results\\ea_200.txt";
 
     @Getter
     @Setter

@@ -31,7 +31,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException {
-        InputReader.read("src/main/resources/data/mTSP_50.data");
+        InputReader.read("src/main/resources/data/mTSP_200.data");
 
         for (int tryI = 0; tryI < Configuration.getNumberOfTries(); tryI++) {
 
