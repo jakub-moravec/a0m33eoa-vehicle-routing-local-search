@@ -1,5 +1,6 @@
 package evaluation;
 
+import configuration.Configuration;
 import model.ModelHolder;
 import model.Solution;
 
@@ -18,6 +19,8 @@ public class EuclideanFitnessEvaluator {
      * @return evaluation
      */
     public static double calculateFitness(Solution solution) {
+        Configuration.setFitnessEvaluated(Configuration.getFitnessEvaluated() + 1);
+
         double longestPath = 0;
 
         int[] visitedCities = new int[ModelHolder.getModel().size()];

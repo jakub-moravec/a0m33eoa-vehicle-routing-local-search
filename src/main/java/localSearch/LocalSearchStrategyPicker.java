@@ -20,7 +20,7 @@ public class LocalSearchStrategyPicker implements LocalSearchStrategy<Solution, 
     @Override
     public Optional<Individual<Solution, Solution>> localSearch(Individual<Solution, Solution> individual) {
         Optional<Individual<Solution, Solution>> mutated = Configuration.getLocalSearchStrategies().get(0).localSearch(individual);
-        if (RANDOM.nextInt(50) < Configuration.getBestFitnessUnchangedEpochs()) {
+        if (RANDOM.nextInt(5000) < Configuration.getBestFitnessUnchangedEpochs()) {
             mutated = Configuration.getLocalSearchStrategies().get(1).localSearch(mutated.get());
         }
         return mutated;

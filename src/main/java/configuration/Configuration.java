@@ -23,7 +23,40 @@ import java.util.List;
  */
 public class Configuration {
 
+    // vars
+    @Getter
+    @Setter
+    private static int fitnessEvaluated = 0;
+
+    @Getter
+    @Setter
+    private static int currentTry = 0;
+
+    @Getter
+    @Setter
+    private static double currentBestFitness = Double.MAX_VALUE;
+
+    @Getter
+    @Setter
+    private static int bestFitnessUnchangedEpochs = 0;
+
     // parameters
+    @Getter
+    @Setter
+    private static String outputFile = "output.txt";
+
+    @Getter
+    @Setter
+    private static int maxFitnessEvaluated = 2000000;
+
+    @Getter
+    @Setter
+    private static int epochSampleModulo = 50;
+
+    @Getter
+    @Setter
+    private static int numberOfTries = 20;
+
     @Getter
     @Setter
     private static int numberOfTravelers = 3;
@@ -50,7 +83,7 @@ public class Configuration {
 
     @Getter
     @Setter
-    private static double probabilityOfCrossover = 0.5;
+    private static double probabilityOfCrossover = 0.6;
 
     @Getter
     @Setter
@@ -59,14 +92,6 @@ public class Configuration {
     @Getter
     @Setter
     private static int individualsToKeep = 100;
-
-    @Getter
-    @Setter
-    private static double currentBestFitness = Double.MAX_VALUE;
-
-    @Getter
-    @Setter
-    private static int bestFitnessUnchangedEpochs = 0;
 
     //strategies
     @Getter
