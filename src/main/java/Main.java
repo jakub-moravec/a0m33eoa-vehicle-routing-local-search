@@ -4,6 +4,7 @@ import config.Configuration;
 import input.InputReader;
 import model.ModelHolder;
 import model.Solution;
+import output.ResultTracker;
 import ui.DrawGraph;
 
 import java.io.IOException;
@@ -19,25 +20,34 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        InputReader.read("src/main/resources/data/mTSP_50.data");
+        InputReader.read("src/main/resources/data/mTSP_200.data");
 
-        Solution solution = getInitialSolution();
-        printSolution(0, solution);
-        DrawGraph.createAndShowGui(solution);
+        for (int tryI = 0; tryI < Configuration.numberOfTries; tryI++) {
 
-        int generation = 0;
-        do {
-            Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
-            if (candidate.getEvaluation() < solution.getEvaluation()) {
-                solution = candidate;
-                printSolution(generation+1, solution);
-            }
-            generation++;
-        } while (generation < 5000);
+            Configuration.fitnessEvaluated = 0;
 
-        DrawGraph.createAndShowGui(solution);
+            Solution solution = getInitialSolution();
+            printSolution(0, solution);
+//            DrawGraph.createAndShowGui(solution);
 
-        System.out.println(Configuration.FITNESS_EVALUATED);
+            int generation = 0;
+            do {
+                Solution candidate = BestNeighborAlgorithm.getNextGenerationSolution(solution);
+                if (candidate.getEvaluation() < solution.getEvaluation()) {
+                    solution = candidate;
+                    printSolution(generation + 1, solution);
+                }
+                generation++;
+                if(generation % Configuration.epochSampleModulo == 0) {
+                    ResultTracker.addResult(generation, solution.getEvaluation());
+                }
+            } while (Configuration.fitnessEvaluated < Configuration.maxFitnessEvaluated);
+
+            DrawGraph.createAndShowGui(solution);
+            System.out.println(Configuration.fitnessEvaluated);
+            Configuration.currentTry = tryI;
+        }
+        ResultTracker.writeResults();
     }
 
     /**

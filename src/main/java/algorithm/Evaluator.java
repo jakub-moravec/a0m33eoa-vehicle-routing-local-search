@@ -18,7 +18,7 @@ public class Evaluator {
      * @return evaluation
      */
     public static double evaluate(Solution solution) {
-        Configuration.FITNESS_EVALUATED++;
+        Configuration.fitnessEvaluated++;
 
         double longestPath = -1;
 
